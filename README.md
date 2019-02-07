@@ -6,7 +6,7 @@ This repository has 5 primary branches. One for each team member and a master br
 # Important Links
 - Agile Stories   : https://docs.google.com/document/d/1DLs85ksAfu_YSsouaVujSBD2SKMgprIQIh0OnjamVPs/edit?usp=sharing 
 - Product Backlog :
-- 
+- WaffleIO        : https://waffle.io/antboyo/Scrum-Team-6---Fast-Food-App
 
 # Contributors
 - Alek Peratoner     : Product Manager
