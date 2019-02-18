@@ -20,6 +20,8 @@ private slots:
 
     void on_loginButton_clicked();
 
+    void on_MWManageRestaurantsButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
