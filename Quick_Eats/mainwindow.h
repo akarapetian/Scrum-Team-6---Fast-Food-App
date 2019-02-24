@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QVector>
+#include "restaurant.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +26,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    //declare vector of restaurants
+    QVector<restaurant> restaurantsVector;
+
+
+
 };
 
 #endif // MAINWINDOW_H

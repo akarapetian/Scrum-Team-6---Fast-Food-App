@@ -290,16 +290,6 @@
          <string>manage restaurants</string>
         </property>
        </widget>
-       <widget class="QGraphicsView" name="graphicsView">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>90</y>
-          <width>711</width>
-          <height>261</height>
-         </rect>
-        </property>
-       </widget>
        <widget class="QLabel" name="label_6">
         <property name="geometry">
          <rect>
@@ -336,7 +326,7 @@
          <string>menu</string>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>500</x>
@@ -361,6 +351,16 @@
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QListWidget" name="restaurantListWidget">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>100</y>
+          <width>711</width>
+          <height>221</height>
+         </rect>
+        </property>
        </widget>
       </widget>
      </widget>
