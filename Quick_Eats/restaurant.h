@@ -2,14 +2,23 @@
 #define RESTAURANT_H
 //#include <iostream>
 #include <QString>
-//#include <vector>
+#include <QVector>
 using namespace std;
 
 struct item{
+    //constructor for easily initializing new items
+    item(){}
+
+    item(QString newItemName, float newItemPrice, int newItemId)
+    {
+        itemName = newItemName;
+        price = newItemPrice;
+        itemId = newItemId;
+    }
+
     QString itemName;
     float price;
     int itemId;
-    item*next;
 };
 
 class restaurant{
@@ -19,12 +28,10 @@ public:
         id = 0;
         name = "";
         distanceSize = 0;
-        distance[0] = 0;
-        menuSize = 0;
-        menu = nullptr;
+        distance[0] = {0};
     }
 
-    restaurant(int newId, QString newName, int newDistanceSize, int newDistance[], int newMenuSize, item *newMenu){
+    restaurant(int newId, QString newName, int newDistanceSize, int newDistance[], QVector<item> newMenu){
         id = newId;
         name = newName;
         distanceSize = newDistanceSize;
@@ -32,30 +39,15 @@ public:
         {
             distance[i] = newDistance[i];
         }
-        menuSize = newMenuSize;
         menu = newMenu;
     }
 
     ~restaurant(){
-        item*temp = menu;
-        id = 0;
-        name = "";
-        distanceSize = 0;
-        for(int i = 0;i<20;i++){
-            distance[i] = 0;
-        }
-        menuSize = 0;
-        while(temp!=nullptr){
-            menu = temp->next;
-            delete temp;
-            temp = menu;
-        }
     }
 
     //MUTATORS
     void changeId(int new_id){id = new_id;}
     void changeName(QString new_name){name = new_name;}
-    void changeMenuSize(int new_menuSize){menuSize = new_menuSize;}
     void changeDistanceSize(int new_distSize){distanceSize = new_distSize;}
     void addDistance(int new_distance){distance[distanceSize] = new_distance;distanceSize++;}
     void removeDistance(int key){
@@ -64,56 +56,52 @@ public:
         }
         distanceSize--;
     }
-    void addMenuItem(QString iName,float iPrice,int iId){
-        item*temp = new item;
-        temp->itemName = iName;
-        temp->price = iPrice;
-        temp->itemId = iId;
-        temp->next = menu;
-        menu = temp;
-        menuSize++; //Increase menu size
+
+    void addMenuItem(QString iName,float iPrice,int iId){     
+        //create new item
+        item newItem(iName, iPrice, iId);
+
+        //push new item onto the menu
+        menu.push_back(newItem);
     }
+
+    //remove an item by its Id
     void removeMenuItem(int key){
-        // Store head node
-        item* temp = menu;
-        item* prev = menu;
+        bool found = false;
+        int count = 0;
 
-        // If head node itself holds the key to be deleted
-        if(temp != nullptr && temp->itemId == key){
-            menu = temp->next;   //Changed head
-            delete temp;         //free old head
-            menuSize--;          //Decrease menuSize
-            return;
+        while(!found && count < menu.size())
+        {
+            if(key == menu[count].itemId)
+            {
+                found = true;
+                menu.remove(count);
+            }
+            count++;
         }
 
-        // Search for the key to be deleted, keep track of the
-        // previous node as we need to change 'prev->next'
-        while(temp != nullptr && temp->itemId != key){
-            prev = temp;
-            temp = temp->next;
+        if(!found)
+        {
+            //output item not found error
         }
-        // If key was not present in linked list
-        if(temp == nullptr){return;}
-
-        // Unlink the node from linked list
-        prev->next = temp->next;
-        delete temp;  // Free memory
-        menuSize--;  //Decrease menuSize
     }
 
     //ACCESSORS
     int getId()const{return id;}
     QString getName()const{return name;}
-    int getMenuSize()const{return menuSize;}
+    int getMenuSize()const{return menu.size();}
     int getDistance(int key)const{return distance[key];}
     int getDistanceSize(){return distanceSize;}
+
+    //must be public at this moment
+    QVector<item> menu; //menu vector (vector of items)
+
 private:
     int id;          //Unique ID of restaurant
     QString name;     //name of restaurant
     int distanceSize; //Number of restaurants
     int distance[20]; //Index 1 in this array is always going to be distance from saddleback.
-    int menuSize;     //Number of menuItems
-    item *menu;       //Linked list of menu Items.
+
 };
 
 #endif // RESTAURANT_H

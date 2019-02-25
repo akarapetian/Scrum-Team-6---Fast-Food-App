@@ -24,6 +24,10 @@ private slots:
 
     void on_MWManageRestaurantsButton_clicked();
 
+    void on_actionLogout_triggered();
+
+    void on_MWManageBackButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 

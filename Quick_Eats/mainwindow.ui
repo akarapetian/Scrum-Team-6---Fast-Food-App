@@ -165,14 +165,14 @@
        <widget class="QLabel" name="label">
         <property name="geometry">
          <rect>
-          <x>350</x>
-          <y>20</y>
-          <width>321</width>
+          <x>370</x>
+          <y>170</y>
+          <width>171</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>welcome u hungry boi (foodie)</string>
+         <string>welcome hungry person</string>
         </property>
        </widget>
       </widget>
@@ -190,7 +190,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="MWWelcomePage">
        <widget class="QPushButton" name="MWTakeTripButton">
@@ -303,16 +303,6 @@
          <string>list of restaurants</string>
         </property>
        </widget>
-       <widget class="QGraphicsView" name="graphicsView_2">
-        <property name="geometry">
-         <rect>
-          <x>810</x>
-          <y>90</y>
-          <width>256</width>
-          <height>381</height>
-         </rect>
-        </property>
-       </widget>
        <widget class="QLabel" name="label_7">
         <property name="geometry">
          <rect>
@@ -362,6 +352,29 @@
          </rect>
         </property>
        </widget>
+       <widget class="QListWidget" name="menuListWidget">
+        <property name="geometry">
+         <rect>
+          <x>800</x>
+          <y>100</y>
+          <width>261</width>
+          <height>261</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="MWManageBackButton">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>20</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Back</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </widget>
@@ -386,8 +399,15 @@
      <string>Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuLogout">
+    <property name="title">
+     <string>Logout</string>
+    </property>
+    <addaction name="actionLogout"/>
+   </widget>
    <addaction name="menuContact"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuLogout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -398,6 +418,11 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionLogout">
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
