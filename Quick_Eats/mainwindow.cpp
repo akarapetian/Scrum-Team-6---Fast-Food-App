@@ -8,6 +8,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //initialize all the pages to the first page
+    ui->primaryPageStackedWidget->setCurrentIndex(0);
+    ui->loginStackedWidget->setCurrentIndex(0);
+    ui->MWStackedWidget->setCurrentIndex(0);
+    ui->FStackedWidget->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
@@ -32,4 +38,10 @@ void MainWindow::on_loginButton_clicked()
     {
         ui->primaryPageStackedWidget->setCurrentIndex(2);
     }
+}
+
+void MainWindow::on_MWManageRestaurantsButton_clicked()
+{
+    //go to manage restaurants page
+    ui->MWStackedWidget->setCurrentIndex(3);
 }
