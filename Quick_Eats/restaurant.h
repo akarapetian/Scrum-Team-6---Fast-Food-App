@@ -101,7 +101,6 @@ private:
     QString name;     //name of restaurant
     int distanceSize; //Number of restaurants
     int distance[20]; //Index 1 in this array is always going to be distance from saddleback.
-
 };
 
 #endif // RESTAURANT_H
