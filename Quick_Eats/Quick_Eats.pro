@@ -30,7 +30,6 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-    restaurant_old.h \
     restaurant.h
 
 FORMS += \
