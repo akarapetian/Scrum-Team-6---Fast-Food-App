@@ -29,7 +29,9 @@ SOURCES += \
         mainwindow.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    restaurant_old.h \
+    restaurant.h
 
 FORMS += \
         mainwindow.ui
