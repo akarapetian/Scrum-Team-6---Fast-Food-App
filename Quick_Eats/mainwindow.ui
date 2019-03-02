@@ -159,7 +159,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="FWelcomePage">
        <widget class="QLabel" name="label">
@@ -185,12 +185,12 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>1101</width>
+        <width>1121</width>
         <height>541</height>
        </rect>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="MWWelcomePage">
        <widget class="QPushButton" name="MWTakeTripButton">
@@ -247,18 +247,166 @@
        </widget>
       </widget>
       <widget class="QWidget" name="MWTakeTripPage">
-       <widget class="QLabel" name="label_3">
+       <widget class="QStackedWidget" name="TakeTripStackedWidget">
         <property name="geometry">
          <rect>
-          <x>490</x>
-          <y>80</y>
-          <width>191</width>
-          <height>17</height>
+          <x>20</x>
+          <y>10</y>
+          <width>1101</width>
+          <height>541</height>
          </rect>
         </property>
-        <property name="text">
-         <string>take a trip</string>
+        <property name="currentIndex">
+         <number>3</number>
         </property>
+        <widget class="QWidget" name="determineTripTypePage">
+         <widget class="QLabel" name="header">
+          <property name="geometry">
+           <rect>
+            <x>290</x>
+            <y>50</y>
+            <width>461</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Please Select Which Type of Custom Trip You Would Like to take</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="customPathButton">
+          <property name="geometry">
+           <rect>
+            <x>130</x>
+            <y>180</y>
+            <width>321</width>
+            <height>151</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Custom Path</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="shortestPathButton">
+          <property name="geometry">
+           <rect>
+            <x>580</x>
+            <y>180</y>
+            <width>321</width>
+            <height>151</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Shortest Path</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="customPathPage">
+         <widget class="QLabel" name="label_3">
+          <property name="geometry">
+           <rect>
+            <x>480</x>
+            <y>30</y>
+            <width>211</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>custom path</string>
+          </property>
+         </widget>
+         <widget class="QListWidget" name="customSelectRestaurantListWidget">
+          <property name="geometry">
+           <rect>
+            <x>130</x>
+            <y>150</y>
+            <width>256</width>
+            <height>311</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QListWidget" name="customEditRestaurantListWidget">
+          <property name="geometry">
+           <rect>
+            <x>490</x>
+            <y>150</y>
+            <width>256</width>
+            <height>311</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_15">
+          <property name="geometry">
+           <rect>
+            <x>160</x>
+            <y>120</y>
+            <width>191</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Select Restaurants to Visit</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_16">
+          <property name="geometry">
+           <rect>
+            <x>550</x>
+            <y>120</y>
+            <width>141</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Edit order of visits</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="customTakeTripButton">
+          <property name="geometry">
+           <rect>
+            <x>840</x>
+            <y>390</y>
+            <width>191</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Take Trip</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="shortestPathPage">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <widget class="QLabel" name="label_17">
+          <property name="geometry">
+           <rect>
+            <x>490</x>
+            <y>20</y>
+            <width>111</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>shortest path</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="tripPage">
+         <widget class="QLabel" name="label_13">
+          <property name="geometry">
+           <rect>
+            <x>520</x>
+            <y>30</y>
+            <width>161</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>trip</string>
+          </property>
+         </widget>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="MWMyTripsPage">
@@ -342,7 +490,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QListWidget" name="restaurantListWidget">
+       <widget class="QListWidget" name="manageRestaurantListWidget">
         <property name="geometry">
          <rect>
           <x>40</x>
@@ -352,7 +500,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QListWidget" name="menuListWidget">
+       <widget class="QListWidget" name="manageMenuListWidget">
         <property name="geometry">
          <rect>
           <x>820</x>
@@ -415,7 +563,7 @@
            <string>add</string>
           </property>
          </widget>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>30</x>
@@ -439,7 +587,7 @@
          </widget>
         </widget>
        </widget>
-       <widget class="QListWidget" name="menuPriceListWidget">
+       <widget class="QListWidget" name="manageMenuPriceListWidget">
         <property name="geometry">
          <rect>
           <x>980</x>
@@ -476,7 +624,7 @@
            <string>add</string>
           </property>
          </widget>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -518,7 +666,7 @@
          </widget>
         </widget>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>870</x>
