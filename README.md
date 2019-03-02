@@ -11,6 +11,7 @@ This repository has 5 primary branches. One for each team member and a master br
 
 # BUGS
 - program is currently crashing with [] index out of range when editing menu prices, then selecting a different restaurant
+   - could be caused by persistentEditor being open
 
 # Contributors
 - Alek Peratoner     : Product Manager
