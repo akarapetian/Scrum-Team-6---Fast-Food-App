@@ -190,7 +190,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="MWWelcomePage">
        <widget class="QPushButton" name="MWTakeTripButton">
@@ -420,7 +420,92 @@
          </rect>
         </property>
         <property name="text">
-         <string>your trips here</string>
+         <string>My Trips</string>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="myTripsListWidget">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>110</y>
+          <width>711</width>
+          <height>221</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="myTripsLocationListWidget">
+        <property name="geometry">
+         <rect>
+          <x>800</x>
+          <y>110</y>
+          <width>161</width>
+          <height>261</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>80</y>
+          <width>141</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>List of Trips</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_18">
+        <property name="geometry">
+         <rect>
+          <x>856</x>
+          <y>80</y>
+          <width>71</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Locations</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="myTripsDeleteButton">
+        <property name="geometry">
+         <rect>
+          <x>630</x>
+          <y>350</y>
+          <width>111</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete Trips</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="MWMyTripsBackButton">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Back</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="myTripsAddButton">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>350</y>
+          <width>111</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Add Trips</string>
         </property>
        </widget>
       </widget>
@@ -703,7 +788,7 @@
      <x>0</x>
      <y>0</y>
      <width>1140</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuContact">

@@ -26,24 +26,17 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-    main.cpp \
-    mainwindow.cpp
+        mainwindow.cpp
 
 HEADERS += \
         mainwindow.h \
     restaurant.h \
-    mainwindow.h \
-    restaurant.h
+    trip.h
 
 FORMS += \
-        mainwindow.ui \
-    mainwindow.ui
+        mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-SUBDIRS += \
-    Quick_Eats.pro

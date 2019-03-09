@@ -6,6 +6,7 @@
 #include <QQueue>
 #include <QListWidget>
 #include "restaurant.h"
+#include "trip.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +27,12 @@ private slots:
     void on_loginButton_clicked();
     void on_actionLogout_triggered();
 
+    //MY TRIPS FUNCTIONS
+    void on_MWMyTripsButton_clicked();
+    void on_MWMyTripsBackButton_clicked();
+    void on_myTripsListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void on_myTripsListWidget_itemDoubleClicked(QListWidgetItem *item);
+
     //MANAGE RESTAURANTS FUNCTIONS
     void on_MWManageRestaurantsButton_clicked();
     void on_MWManageBackButton_clicked();
@@ -44,6 +51,7 @@ private slots:
 
 
 
+    //TRIP FUNCTIONS
     void on_customPathButton_clicked();
 
     void on_shortestPathButton_clicked();
@@ -67,6 +75,12 @@ private:
     //this data structure holds all the custom trips that belong to a user
     //it is a vector of pointers, each pointing to a Queue of restaurants (the custom trip).
     QVector<QQueue<restaurant>*> customTrips;
+
+    //this is an object, that holds a queue of vectors. Only made it so I could tie a name to a queue
+    trip myTrip;
+
+    //vector of pointers, each pointing to a trip
+    QVector<trip> myTrips;
 };
 
 #endif // MAINWINDOW_H

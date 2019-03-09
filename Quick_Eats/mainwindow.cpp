@@ -42,6 +42,30 @@ MainWindow::MainWindow(QWidget *parent) :
     restaurantsVector[1].addMenuItem("Salad", 2.99, 2);
     restaurantsVector[1].addMenuItem("Nuggets", 7.00, 3);
 
+    restaurantsVector.push_back(restaurant(3, "Dog Food", 1, tempDistances, tempMenu));
+    restaurantsVector[2].addMenuItem("Gross", 8.99, 1);
+    restaurantsVector[2].addMenuItem("Dude What", 11.99, 2);
+    restaurantsVector[2].addMenuItem("Slime?", 21.00, 3);
+
+
+    myTrips.push_back(trip("Mac Man"));
+    myTrips[0].addLocation(restaurantsVector[0]);
+    myTrips[0].addLocation(restaurantsVector[1]);
+    myTrips[0].addLocation(restaurantsVector[2]);
+
+    myTrips.push_back(trip("Wendy Woman"));
+    myTrips[1].addLocation(restaurantsVector[1]);
+    myTrips[1].addLocation(restaurantsVector[0]);
+    myTrips[1].addLocation(restaurantsVector[2]);
+
+    myTrips.push_back(trip("Dog Dude"));
+    myTrips[2].addLocation(restaurantsVector[2]);
+    myTrips[2].addLocation(restaurantsVector[1]);
+    myTrips[2].addLocation(restaurantsVector[0]);
+
+    for(int i  = 0; i < myTrips.size();i++)
+        ui->myTripsListWidget->addItem(myTrips[i].getName());
+
 
     //update the list view in the manage restaurants page
     for(int i = 0; i < restaurantsVector.size(); i++)
@@ -88,6 +112,43 @@ void MainWindow::on_actionLogout_triggered()
     ui->FStackedWidget->setCurrentIndex(0);
 }
 
+//************************************************************************
+// MY TRIPS AND MENU FUNCTIONS
+//************************************************************************
+void MainWindow::on_MWMyTripsButton_clicked()
+{
+    //go to manage restaurants page
+    ui->MWStackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_MWMyTripsBackButton_clicked()
+{
+    //go back to the main menu
+    ui->primaryPageStackedWidget->setCurrentIndex(2);
+    ui->MWStackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::on_myTripsListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if(ui->myTripsListWidget->isPersistentEditorOpen(previous))
+    {
+        //close any editors and update the vector with the new name of restaurant
+        ui->myTripsListWidget->closePersistentEditor(previous);
+        myTrips[previous->listWidget()->row(previous)].changeName(previous->text());
+    }
+
+    ui->myTripsLocationListWidget->clear();
+
+    for(int i = 0; i < myTrips[ui->myTripsListWidget->currentRow()].getTripSize(); i++){
+        ui->myTripsLocationListWidget->addItem(myTrips[ui->myTripsListWidget->currentRow()].getLocation(i).getName());
+    }
+}
+
+void MainWindow::on_myTripsListWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    //if a trip name is double clicked, it allows user to edit the name directly
+    ui->myTripsListWidget->openPersistentEditor(item);
+}
 
 //************************************************************************
 // MANAGE RESTAURANTS AND MENUS FUNCTIONS
