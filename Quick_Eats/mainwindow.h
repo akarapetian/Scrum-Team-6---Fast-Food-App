@@ -51,8 +51,6 @@ private slots:
 
 
 
-    //TRIP FUNCTIONS
-
     void on_MWTakeTripButton_clicked();
 
     void on_customSelectRestaurantListWidget_itemChanged(QListWidgetItem *item);
@@ -94,6 +92,7 @@ private:
     //array of restaurant id's that are no longer of use to the algorithm
     //these elements may have already been visted, or were not added to the list at all
     QVector<int> nullifiedLocations;
+
 };
 
 #endif // MAINWINDOW_H
