@@ -90,7 +90,7 @@ public:
     int getId()const{return id;}
     QString getName()const{return name;}
     int getMenuSize()const{return menu.size();}
-    int getDistance(int key)const{return distance[key];}
+    float getDistance(int key)const{return distance[key];}
     int getDistanceSize(){return distanceSize;}
 
     //must be public at this moment
@@ -100,7 +100,7 @@ private:
     int id;          //Unique ID of restaurant
     QString name;     //name of restaurant
     int distanceSize; //Number of restaurants
-    int distance[20]; //Index 1 in this array is always going to be distance from saddleback.
+    float distance[11]; //Index 0 in this array is always going to be distance from saddleback.
 };
 
 #endif // RESTAURANT_H
