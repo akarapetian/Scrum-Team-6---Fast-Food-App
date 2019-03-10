@@ -42,6 +42,30 @@ MainWindow::MainWindow(QWidget *parent) :
     restaurantsVector[1].addMenuItem("Salad", 2.99, 2);
     restaurantsVector[1].addMenuItem("Nuggets", 7.00, 3);
 
+    restaurantsVector.push_back(restaurant(3, "Dog Food", 1, tempDistances, tempMenu));
+    restaurantsVector[2].addMenuItem("Gross", 8.99, 1);
+    restaurantsVector[2].addMenuItem("Dude What", 11.99, 2);
+    restaurantsVector[2].addMenuItem("Slime?", 21.00, 3);
+
+
+    myTrips.push_back(trip("Mac Man"));
+    myTrips[0].addLocation(restaurantsVector[0]);
+    myTrips[0].addLocation(restaurantsVector[1]);
+    myTrips[0].addLocation(restaurantsVector[2]);
+
+    myTrips.push_back(trip("Wendy Woman"));
+    myTrips[1].addLocation(restaurantsVector[1]);
+    myTrips[1].addLocation(restaurantsVector[0]);
+    myTrips[1].addLocation(restaurantsVector[2]);
+
+    myTrips.push_back(trip("Dog Dude"));
+    myTrips[2].addLocation(restaurantsVector[2]);
+    myTrips[2].addLocation(restaurantsVector[1]);
+    myTrips[2].addLocation(restaurantsVector[0]);
+
+    for(int i  = 0; i < myTrips.size();i++)
+        ui->myTripsListWidget->addItem(myTrips[i].getName());
+
 
     //update the list view in the manage restaurants page
     for(int i = 0; i < restaurantsVector.size(); i++)
@@ -88,6 +112,43 @@ void MainWindow::on_actionLogout_triggered()
     ui->FStackedWidget->setCurrentIndex(0);
 }
 
+//************************************************************************
+// MY TRIPS AND MENU FUNCTIONS
+//************************************************************************
+void MainWindow::on_MWMyTripsButton_clicked()
+{
+    //go to manage restaurants page
+    ui->MWStackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_MWMyTripsBackButton_clicked()
+{
+    //go back to the main menu
+    ui->primaryPageStackedWidget->setCurrentIndex(2);
+    ui->MWStackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::on_myTripsListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if(ui->myTripsListWidget->isPersistentEditorOpen(previous))
+    {
+        //close any editors and update the vector with the new name of restaurant
+        ui->myTripsListWidget->closePersistentEditor(previous);
+        myTrips[previous->listWidget()->row(previous)].changeName(previous->text());
+    }
+
+    ui->myTripsLocationListWidget->clear();
+
+    for(int i = 0; i < myTrips[ui->myTripsListWidget->currentRow()].getTripSize(); i++){
+        ui->myTripsLocationListWidget->addItem(myTrips[ui->myTripsListWidget->currentRow()].getLocation(i).getName());
+    }
+}
+
+void MainWindow::on_myTripsListWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    //if a trip name is double clicked, it allows user to edit the name directly
+    ui->myTripsListWidget->openPersistentEditor(item);
+}
 
 //************************************************************************
 // MANAGE RESTAURANTS AND MENUS FUNCTIONS
@@ -255,16 +316,10 @@ void MainWindow::on_deleteItemButton_clicked()
     }
 }
 //***************************************************************************************************************************
-// END OF MANAGE RESTAURANTS AND MENUS FUNCTIONS
+// TAKING TRIPS FUNCTIONS
 //***************************************************************************************************************************
 
 void MainWindow::on_MWTakeTripButton_clicked()
-{
-    ui->MWStackedWidget->setCurrentIndex(1);
-}
-
-
-void MainWindow::on_customPathButton_clicked()
 {
     //update the list view in the manage restaurants page
     for(int i = 0; i < restaurantsVector.size(); i++)
@@ -275,8 +330,9 @@ void MainWindow::on_customPathButton_clicked()
         ui->customSelectRestaurantListWidget->item(i)->setCheckState(Qt::Unchecked);
     }
 
-    ui->TakeTripStackedWidget->setCurrentIndex(1);
+    ui->MWStackedWidget->setCurrentIndex(1);
 }
+
 
 //if a restaurant is checked, it gets moved to the second list widget where the user
 //is able to drag the items around into their desired order
@@ -349,7 +405,127 @@ void MainWindow::on_customTakeTripButton_clicked()
 }
 
 
-void MainWindow::on_shortestPathButton_clicked()
+bool MainWindow::null(int index)
 {
-    ui->TakeTripStackedWidget->setCurrentIndex(2);
+    //perform sequential search on nullified vector
+    bool found = false;
+    for(int i = 0; i < nullifiedLocations.size(); i++)
+    {
+        if(index == nullifiedLocations[i])
+        {
+            found = true;
+        }
+    }
+    return found;
+}
+
+//returns the column corresponding to the shortest distance
+int MainWindow::findShortestDistance(int row)
+{
+
+    int index = 0;
+    float minimumDistance =  distanceMatrix[row][0];
+
+    for(int column = 1; column < 11; column++)
+    {
+        if(minimumDistance > distanceMatrix[row][column])
+        {
+            //new minimum distance
+            minimumDistance = distanceMatrix[row][column];
+            index = column;
+        }
+    }
+
+    return index;
+}
+
+//SHORTEST PATH ALGORITHM GOES HERE
+void MainWindow::on_shortestPathButton_clicked()
+{   
+
+    //**********************************************************************************************
+    //* FIND THE RESTAURANTS THAT NEED TO BE VISITED AND UN-NULLIFY THEM
+    //**********************************************************************************************
+
+
+    for(int i = 0; i < 11; i++)
+    {
+        nullifiedLocations.push_back(i);
+    }
+
+    int count;
+    bool found;
+    //activate locations by iterating through editrestaurantlistwidget
+    for(int i = 0; i < ui->customEditRestaurantListWidget->count(); i++)
+    {
+        //find index of the item in the list widget, and pop that from nullifiedlocations vector
+        count = 0;
+        found = false;
+        //must perform search to add the correct restaurants to the queue
+        while(!found && count < restaurantsVector.size())
+        {
+
+
+            if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
+            {
+                //when the names match, remove the index from the nullifiedlocations vector
+                nullifiedLocations.remove(count);
+                found = true;
+            }
+            else
+            {
+                ++count;
+            }
+        }
+    }
+
+    //QTextStream(stdout) << "created nullifiedlocations vector" << endl;
+
+
+    //**********************************************************************************************
+    //* FILL MATRIX WITH ALL DISTANCES
+    //**********************************************************************************************
+
+    //fill 2d array with distances
+    //insert all distances into the 2d matrix
+
+    //***** CHANGE THIS .SIZE ***
+    for(int i = 0; i < restaurantsVector.size(); i++)
+    {
+        //fill matrix
+        for(int j = 0; j < restaurantsVector.size(); j++)
+        {
+            //test that the matrix has been filled properly
+            if(!null(i) && !null(j))
+            {
+                QTextStream(stdout) << "created nullifiedlocations vector" << endl;
+                distanceMatrix[i][j] = restaurantsVector[j].getDistance(i);
+                QTextStream(stdout) << distanceMatrix[i][j] << endl;
+            }
+        }
+    }
+
+    //**********************************************************************************************
+    //* RUN SHORTEST PATH ALGORITHM ON NON-NULL RESTAURANTS
+    //**********************************************************************************************
+
+    //begin at saddleback 0,0
+    //search row for smallest distance
+    //after finding smallest distance, travel to the columnth row
+    //nullify columnth column
+
+    ui->customEditRestaurantListWidget->clear();
+
+    //initialize row and column to starting positions, default to saddleback
+    int row = 0;
+    ui->customEditRestaurantListWidget->addItem(restaurantsVector[row].getName());
+    nullifiedLocations.push_back(row);
+
+    while(nullifiedLocations.size() < restaurantsVector.size())
+    {
+        row = findShortestDistance(row);
+        ui->customEditRestaurantListWidget->addItem(restaurantsVector[row].getName());
+        nullifiedLocations.push_back(row);
+
+    }
 }
