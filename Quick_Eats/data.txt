@@ -1,0 +1,341 @@
+13
+Saddleback College
+0
+0.0
+8.0
+4.29
+12.41
+7.56
+2.67
+5.94
+8.44
+12.75
+9.19
+14.54
+10.1
+6.6
+0
+
+McDonald's
+1
+8
+0.0 
+13.2
+15.4
+11.5
+13.3
+15.2
+5.8
+6.9
+8.56
+3.5
+11.5
+13.8
+8
+Big Mac
+3.99
+French Fries
+2.95
+Hamburger
+1.79
+Double Cheeseburger
+4.29
+Cheeseburger
+2.29
+Quarter Pounder with Cheese
+4.99
+Filet-O-Fish
+3.33
+McRib
+4.97
+
+Chipotle
+2
+4.29
+13.2
+0.0
+15.1
+14.8
+0.1
+4.2
+10.3
+9.3
+5.2
+11.0
+14.2
+4.4
+6
+Veggie taco
+5.99
+Veggie burrito
+7.99
+Steak taco
+3.99
+Steak burrito
+8.99
+Chicken taco
+4.99
+Chicken burrito
+6.99
+
+Domino's Pizza
+3
+12.41
+15.4
+15.1
+0.0
+4.3
+16.1
+14.3
+18.4
+18.3
+17.2
+17.2
+13.4
+18.1
+5
+Veggie pizza
+9.99
+Pepperoni pizza 
+8.99
+All meat pizza
+12.99
+Cheese pizza
+5.99
+Mushroom and pepperoni pizza 
+7.99
+
+KFC
+4
+7.56
+11.5
+14.8
+4.3
+0.0
+8.1
+9.4
+14.4
+14.3
+13.2
+13.2
+16.5
+18.8
+4
+Three piece original fried chicken  
+6.99
+Bucket of crispy fried chicken  
+13.99
+Mashed potatoes
+5.99
+Cole slaw
+5.99
+
+Subway
+5
+2.67
+13.3
+0.1
+16.1
+8.1
+0.0
+4.5
+8.5
+8.4
+5.2
+12.1
+3.3
+0.8
+4
+Veggie sandwich
+4.99
+Tuna sandwich
+6.99
+Italian sandwich
+7.99
+Turkey sandwich
+5.99
+
+In-N-Out Burger
+6
+5.94
+15.2
+4.2
+14.3
+9.4
+4.5
+0.0
+8.56
+11.1
+5.1
+14.2
+12.2
+8.2
+5
+Hamburger
+2.99
+Cheeseburger
+3.29
+Milk shake
+2.99
+French fries
+1.79
+Medium coke
+2.33
+
+Wendy's
+7
+8.44
+5.8
+10.3
+18.4
+14.4
+8.5
+8.56
+0.0
+0.7
+5.8
+4.0
+7.8
+10.8
+5
+Hamburger
+3.99
+Cheeseburger
+4.29
+Small classic chocolate Frosty
+2.99
+French fries
+1.79
+Chicken wrap
+4.39
+
+Jack in the Box
+8
+12.75
+6.9
+9.3
+18.7
+14.3
+8.4
+11.1
+0.7
+0.0
+5.7
+4.7
+6.9
+9.4
+4
+Chicken club salad  
+6.99
+Southwest chicken salad  
+7.29
+Grilled chicken salad
+5.99
+Side salad
+1.79
+
+El Pollo Loco
+9
+9.19
+8.56
+5.2
+17.2
+13.2
+5.2
+5.1
+5.8
+5.7
+0.0
+9.5
+8.2
+5.5
+3
+Monterrey pollo salad
+6.99
+Steamed vegetables
+3.29
+Chicken tortilla soup
+5.29
+
+Papa John's Pizza
+10
+14.54
+3.5
+11.0
+17.2
+13.2
+12.1
+14.2
+4.0
+4.7
+9.5
+0.0
+6.11
+11.8
+5
+Veggie pizza
+4.09
+Pepperoni pizza 
+8.99
+All meat pizza
+12.99
+Cheese pizza
+5.99
+Mushroom and pepperoni pizza 
+6.99
+
+Pizza Hut
+11
+10.1
+11.5 
+14.2
+13.4
+16.5
+3.3
+12.2
+7.8
+6.9
+8.2
+6.11
+0.0
+5.8
+6
+Veggie pizza
+4.99
+Pepperoni pizza 
+8.99
+All meat pizza
+12.99
+Cheese pizza
+5.99
+Mushroom and pepperoni pizza 
+6.99
+Mushroom and green pepper pizza 
+7.29
+
+Sonic
+12
+6.6
+13.8
+4.4
+18.1
+18.8
+0.8
+8.2
+10.8
+9.4
+5.5
+11.8
+5.8
+0.0
+5
+Sonic hamburger
+4.99
+Sonic cheeseburger
+4.29
+New York dog
+2.89
+French fries
+1.79
+Medium Pepsi
+2.55

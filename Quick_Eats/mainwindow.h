@@ -4,7 +4,9 @@
 #include <QMainWindow>
 #include <QVector>
 #include <QQueue>
+#include <QFile>
 #include <QListWidget>
+#include <QMessageBox>
 #include "restaurant.h"
 #include "trip.h"
 
@@ -21,6 +23,8 @@ public:
     ~MainWindow();
 
 private slots:
+
+    void readRestaurantFile(QVector<restaurant>&);
 
     //LOGIN FUNCTIONS
     void on_mainLoginButton_clicked();

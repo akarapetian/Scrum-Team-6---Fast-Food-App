@@ -28,43 +28,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->customEditRestaurantListWidget->viewport()->setAcceptDrops(true);
     ui->customEditRestaurantListWidget->setDropIndicatorShown(true);
 
-    int tempDistances[1] = {0};
-    QVector<item> tempMenu;
+    readRestaurantFile(restaurantsVector);
 
-    //CALL PARSER HERE
-    restaurantsVector.push_back(restaurant(1, "McDonalds", 1, tempDistances, tempMenu));
-    restaurantsVector[0].addMenuItem("Big Mac", 5.99, 1);
-    restaurantsVector[0].addMenuItem("Fillet o' Fish", 4.99, 2);
-    restaurantsVector[0].addMenuItem("Chicken Nuggets", 3.00, 3);
+//    myTrips.push_back(trip("Mac Man"));
+//    myTrips[0].addLocation(restaurantsVector[0]);
+//    myTrips[0].addLocation(restaurantsVector[1]);
+//    myTrips[0].addLocation(restaurantsVector[2]);
 
-    restaurantsVector.push_back(restaurant(2, "Wendys", 1, tempDistances, tempMenu));
-    restaurantsVector[1].addMenuItem("Burger", 3.99, 1);
-    restaurantsVector[1].addMenuItem("Salad", 2.99, 2);
-    restaurantsVector[1].addMenuItem("Nuggets", 7.00, 3);
+//    myTrips.push_back(trip("Wendy Woman"));
+//    myTrips[1].addLocation(restaurantsVector[1]);
+//    myTrips[1].addLocation(restaurantsVector[0]);
+//    myTrips[1].addLocation(restaurantsVector[2]);
 
-    restaurantsVector.push_back(restaurant(3, "Dog Food", 1, tempDistances, tempMenu));
-    restaurantsVector[2].addMenuItem("Gross", 8.99, 1);
-    restaurantsVector[2].addMenuItem("Dude What", 11.99, 2);
-    restaurantsVector[2].addMenuItem("Slime?", 21.00, 3);
+//    myTrips.push_back(trip("Dog Dude"));
+//    myTrips[2].addLocation(restaurantsVector[2]);
+//    myTrips[2].addLocation(restaurantsVector[1]);
+//    myTrips[2].addLocation(restaurantsVector[0]);
 
-
-    myTrips.push_back(trip("Mac Man"));
-    myTrips[0].addLocation(restaurantsVector[0]);
-    myTrips[0].addLocation(restaurantsVector[1]);
-    myTrips[0].addLocation(restaurantsVector[2]);
-
-    myTrips.push_back(trip("Wendy Woman"));
-    myTrips[1].addLocation(restaurantsVector[1]);
-    myTrips[1].addLocation(restaurantsVector[0]);
-    myTrips[1].addLocation(restaurantsVector[2]);
-
-    myTrips.push_back(trip("Dog Dude"));
-    myTrips[2].addLocation(restaurantsVector[2]);
-    myTrips[2].addLocation(restaurantsVector[1]);
-    myTrips[2].addLocation(restaurantsVector[0]);
-
-    for(int i  = 0; i < myTrips.size();i++)
-        ui->myTripsListWidget->addItem(myTrips[i].getName());
+//    for(int i  = 0; i < myTrips.size();i++)
+//        ui->myTripsListWidget->addItem(myTrips[i].getName());
 
 
     //update the list view in the manage restaurants page
@@ -529,3 +511,61 @@ void MainWindow::on_shortestPathButton_clicked()
 
     }
 }
+
+void MainWindow::readRestaurantFile(QVector<restaurant>& rest){
+
+    QFile file("/Users/alekperatoner/Desktop/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+
+    QString tempRest;
+    QVector<item> tempMenu;
+    QString tempItem;
+    float tempPrice = 0;
+    int tempId = 0;
+    int menuSize = 0;
+    QTextStream in(&file);
+    QString line;
+    int newDistanceSize;
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QMessageBox::information(0, "error", file.errorString());
+    }
+    else{
+        line = in.readLine();
+        newDistanceSize = line.toInt();
+
+        int tempDistance[newDistanceSize];
+        while(!in.atEnd()){
+            line = in.readLine();
+            tempRest = line;
+            line = in.readLine();
+            tempId = line.toInt();
+            for(int i = 0; i < newDistanceSize; i++){
+                line = in.readLine();
+                tempDistance[i] = line.toInt();
+            }
+            line = in.readLine();
+            menuSize = line.toInt();
+            for(int j = 0; j < menuSize; j++){
+                line = in.readLine();
+                tempItem = line;
+                line = in.readLine();
+                tempPrice = line.toFloat();
+                tempMenu.push_back(item(tempItem, tempPrice, j));
+            }
+            line = in.readLine();
+            if(line.isEmpty()){
+                rest.push_back(restaurant(tempId, tempRest, newDistanceSize, tempDistance, tempMenu));
+                tempMenu.clear();
+                tempRest = "";
+                tempId = 0;
+                for(int i = 0; i < newDistanceSize; i++){
+                    tempDistance[i] = 0;
+                }
+                menuSize = 0;
+            }
+        }
+    }
+
+    file.close();
+}
+
