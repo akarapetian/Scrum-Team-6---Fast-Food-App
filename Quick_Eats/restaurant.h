@@ -31,7 +31,7 @@ public:
         distance[0] = {0};
     }
 
-    restaurant(int newId, QString newName, int newDistanceSize, int newDistance[], QVector<item> newMenu){
+    restaurant(int newId, QString newName, int newDistanceSize, float newDistance[], QVector<item> newMenu){
         id = newId;
         name = newName;
         distanceSize = newDistanceSize;
@@ -100,7 +100,10 @@ private:
     int id;          //Unique ID of restaurant
     QString name;     //name of restaurant
     int distanceSize; //Number of restaurants
-    float distance[11]; //Index 0 in this array is always going to be distance from saddleback.
+
+
+    //THIS IS WHERE THE ERROR WAS (distance was declared to be size 10)
+    float distance[13]; //Index 0 in this array is always going to be distance from saddleback.
 };
 
 #endif // RESTAURANT_H

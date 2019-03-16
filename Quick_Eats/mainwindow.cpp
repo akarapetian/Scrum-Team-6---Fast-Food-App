@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    readRestaurantFile();
+
     //initialize all the pages to the first page
     ui->primaryPageStackedWidget->setCurrentIndex(0);
     ui->loginStackedWidget->setCurrentIndex(0);
@@ -28,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->customEditRestaurantListWidget->viewport()->setAcceptDrops(true);
     ui->customEditRestaurantListWidget->setDropIndicatorShown(true);
 
-    readRestaurantFile(restaurantsVector);
+
 
 //    myTrips.push_back(trip("Mac Man"));
 //    myTrips[0].addLocation(restaurantsVector[0]);
@@ -512,9 +514,10 @@ void MainWindow::on_shortestPathButton_clicked()
     }
 }
 
-void MainWindow::readRestaurantFile(QVector<restaurant>& rest){
+void MainWindow::readRestaurantFile(){
 
-    QFile file("/Users/alekperatoner/Desktop/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+    QString myfile = "/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt";
+    QFile file(myfile);
 
     QString tempRest;
     QVector<item> tempMenu;
@@ -527,21 +530,22 @@ void MainWindow::readRestaurantFile(QVector<restaurant>& rest){
     int newDistanceSize;
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        QMessageBox::information(0, "error", file.errorString());
+        QMessageBox::information(nullptr, "error", file.errorString());
     }
     else{
         line = in.readLine();
         newDistanceSize = line.toInt();
 
-        int tempDistance[newDistanceSize];
+        float tempDistance[13] = {0};
         while(!in.atEnd()){
             line = in.readLine();
             tempRest = line;
             line = in.readLine();
             tempId = line.toInt();
-            for(int i = 0; i < newDistanceSize; i++){
+
+            for(int i = 0; i < 13; i++){
                 line = in.readLine();
-                tempDistance[i] = line.toInt();
+                tempDistance[i] = line.toFloat();
             }
             line = in.readLine();
             menuSize = line.toInt();
@@ -553,17 +557,22 @@ void MainWindow::readRestaurantFile(QVector<restaurant>& rest){
                 tempMenu.push_back(item(tempItem, tempPrice, j));
             }
             line = in.readLine();
+
             if(line.isEmpty()){
-                rest.push_back(restaurant(tempId, tempRest, newDistanceSize, tempDistance, tempMenu));
+                restaurantsVector.push_back(restaurant(tempId, tempRest, newDistanceSize, tempDistance, tempMenu));
                 tempMenu.clear();
                 tempRest = "";
                 tempId = 0;
-                for(int i = 0; i < newDistanceSize; i++){
+                for(int i = 0; i < 13; i++){
                     tempDistance[i] = 0;
                 }
                 menuSize = 0;
+                line.clear();
+                tempRest.clear();
             }
+
         }
+
     }
 
     file.close();
