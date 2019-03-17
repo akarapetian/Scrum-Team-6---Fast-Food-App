@@ -67,8 +67,13 @@ private slots:
 
 
     //SHORTEST PATH FUNCTIONS
+    /*
     bool null(int index); //returns true if the index has been nullified within nullifiedLocations vector
-    int  findShortestDistance(int row); //searches a row for the shortest distance and returns the column
+      */
+
+
+    void optimizePath(int j, int n); //searches a row for the shortest distance and returns the column
+    bool validIndex(int i); //returns true if the index is alright to be operated on
 
 private:
     Ui::MainWindow *ui;
@@ -94,10 +99,11 @@ private:
     //create matrix of distances
     //(two dimensional array of floats)
     //will contain 11 rows and columns, because there are 10 locations + saddleback is the number of restaurants in the editRestaurantListWidget
-    float distanceMatrix[11][11];
+    QVector<QVector<float>> distanceMatrix;
     //array of restaurant id's that are no longer of use to the algorithm
+    QVector<int> nullifiedIndexes;
     //these elements may have already been visted, or were not added to the list at all
-    QVector<int> nullifiedLocations;
+
 
 };
 
