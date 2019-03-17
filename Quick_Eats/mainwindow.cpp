@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    readRestaurantFile();
+
     //initialize all the pages to the first page
     ui->primaryPageStackedWidget->setCurrentIndex(0);
     ui->loginStackedWidget->setCurrentIndex(0);
@@ -28,43 +30,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->customEditRestaurantListWidget->viewport()->setAcceptDrops(true);
     ui->customEditRestaurantListWidget->setDropIndicatorShown(true);
 
-    int tempDistances[1] = {0};
-    QVector<item> tempMenu;
-
-    //CALL PARSER HERE
-    restaurantsVector.push_back(restaurant(1, "McDonalds", 1, tempDistances, tempMenu));
-    restaurantsVector[0].addMenuItem("Big Mac", 5.99, 1);
-    restaurantsVector[0].addMenuItem("Fillet o' Fish", 4.99, 2);
-    restaurantsVector[0].addMenuItem("Chicken Nuggets", 3.00, 3);
-
-    restaurantsVector.push_back(restaurant(2, "Wendys", 1, tempDistances, tempMenu));
-    restaurantsVector[1].addMenuItem("Burger", 3.99, 1);
-    restaurantsVector[1].addMenuItem("Salad", 2.99, 2);
-    restaurantsVector[1].addMenuItem("Nuggets", 7.00, 3);
-
-    restaurantsVector.push_back(restaurant(3, "Dog Food", 1, tempDistances, tempMenu));
-    restaurantsVector[2].addMenuItem("Gross", 8.99, 1);
-    restaurantsVector[2].addMenuItem("Dude What", 11.99, 2);
-    restaurantsVector[2].addMenuItem("Slime?", 21.00, 3);
 
 
-    myTrips.push_back(trip("Mac Man"));
-    myTrips[0].addLocation(restaurantsVector[0]);
-    myTrips[0].addLocation(restaurantsVector[1]);
-    myTrips[0].addLocation(restaurantsVector[2]);
+//    myTrips.push_back(trip("Mac Man"));
+//    myTrips[0].addLocation(restaurantsVector[0]);
+//    myTrips[0].addLocation(restaurantsVector[1]);
+//    myTrips[0].addLocation(restaurantsVector[2]);
 
-    myTrips.push_back(trip("Wendy Woman"));
-    myTrips[1].addLocation(restaurantsVector[1]);
-    myTrips[1].addLocation(restaurantsVector[0]);
-    myTrips[1].addLocation(restaurantsVector[2]);
+//    myTrips.push_back(trip("Wendy Woman"));
+//    myTrips[1].addLocation(restaurantsVector[1]);
+//    myTrips[1].addLocation(restaurantsVector[0]);
+//    myTrips[1].addLocation(restaurantsVector[2]);
 
-    myTrips.push_back(trip("Dog Dude"));
-    myTrips[2].addLocation(restaurantsVector[2]);
-    myTrips[2].addLocation(restaurantsVector[1]);
-    myTrips[2].addLocation(restaurantsVector[0]);
+//    myTrips.push_back(trip("Dog Dude"));
+//    myTrips[2].addLocation(restaurantsVector[2]);
+//    myTrips[2].addLocation(restaurantsVector[1]);
+//    myTrips[2].addLocation(restaurantsVector[0]);
 
-    for(int i  = 0; i < myTrips.size();i++)
-        ui->myTripsListWidget->addItem(myTrips[i].getName());
+//    for(int i  = 0; i < myTrips.size();i++)
+//        ui->myTripsListWidget->addItem(myTrips[i].getName());
 
 
     //update the list view in the manage restaurants page
@@ -79,6 +63,67 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::readRestaurantFile(){
+
+    QFile file("/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+
+    QString tempRest;
+    QVector<item> tempMenu;
+    QString tempItem;
+    float tempPrice = 0;
+    int tempId = 0;
+    int menuSize = 0;
+    QTextStream in(&file);
+    QString line;
+    int newDistanceSize;
+    QVector<float> tempDistance;
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QMessageBox::information(nullptr, "error", file.errorString());
+    }
+    else{
+        line = in.readLine();
+        newDistanceSize = line.toInt();
+
+        while(!in.atEnd()){
+            line = in.readLine();
+            tempRest = line;
+            line = in.readLine();
+            tempId = line.toInt();
+
+            for(int i = 0; i < newDistanceSize; i++){
+                line = in.readLine();
+                tempDistance.push_back(line.toFloat());
+            }
+            line = in.readLine();
+            menuSize = line.toInt();
+            for(int j = 0; j < menuSize; j++){
+                line = in.readLine();
+                tempItem = line;
+                line = in.readLine();
+                tempPrice = line.toFloat();
+                tempMenu.push_back(item(tempItem, tempPrice, j));
+            }
+            line = in.readLine();
+
+            if(line.isEmpty()){
+                restaurantsVector.push_back(restaurant(tempId, tempRest, tempDistance, tempMenu));
+                tempMenu.clear();
+                tempRest = "";
+                tempId = 0;
+                for(int i = 0; i < newDistanceSize; i++){
+                    tempDistance.clear();
+                }
+                menuSize = 0;
+                line.clear();
+                tempRest.clear();
+            }
+        }
+    }
+    file.close();
+}
+
 
 void MainWindow::on_mainLoginButton_clicked()
 {
@@ -228,8 +273,10 @@ void MainWindow::on_addRestaurantButton_clicked()
     ui->addRestaurantStackedWidget->setCurrentIndex(1);
 }
 
+//need to go back and make this function parse the second text file
 void MainWindow::on_addButton_clicked()
 {
+    /*
     if(ui->newRestaurantNameLineEdit->text() != "")
     {
         QVector<item> newMenu;
@@ -238,6 +285,7 @@ void MainWindow::on_addButton_clicked()
     }
     ui->newRestaurantNameLineEdit->clear();
     ui->addRestaurantStackedWidget->setCurrentIndex(0);
+    */
 }
 
 void MainWindow::on_manageMenuListWidget_itemDoubleClicked(QListWidgetItem *item)
@@ -404,59 +452,104 @@ void MainWindow::on_customTakeTripButton_clicked()
     }
 }
 
-
-bool MainWindow::null(int index)
+bool MainWindow::validIndex(int i)
 {
-    //perform sequential search on nullified vector
-    bool found = false;
-    for(int i = 0; i < nullifiedLocations.size(); i++)
-    {
-        if(index == nullifiedLocations[i])
-        {
-            found = true;
-        }
-    }
-    return found;
+    bool valid = true;
+
+    //if i exists in a list of nullified indexes, valid = false;
+   for(int count = 0; count < nullifiedIndexes.size(); count++)
+   {
+       if(i == nullifiedIndexes[count])
+       {
+           valid = false;
+       }
+   }
+    return valid;
 }
 
-//returns the column corresponding to the shortest distance
-int MainWindow::findShortestDistance(int row)
+//recursive version
+void MainWindow::optimizePath(int j, int n)
 {
-
+    //iterate through the whole row and return the index of the smallest number
     int index = 0;
-    float minimumDistance =  distanceMatrix[row][0];
+    float minimumDistance =  100000000;
 
-    for(int column = 1; column < 11; column++)
+    for(int i = 0; i < restaurantsVector[0].getDistanceSize(); i++)
     {
-        if(minimumDistance > distanceMatrix[row][column])
+        if(minimumDistance > distanceMatrix[j][i] && validIndex(i))
         {
             //new minimum distance
-            minimumDistance = distanceMatrix[row][column];
-            index = column;
+            minimumDistance = distanceMatrix[j][i];
+            index = i;
         }
     }
 
-    return index;
+    //add item to listwidget
+    ui->customEditRestaurantListWidget->addItem(restaurantsVector[index].getName());
+    nullifiedIndexes.push_back(index);
+
+    if(ui->customEditRestaurantListWidget->count() < n)
+    {
+        optimizePath(index, n);
+    }
 }
 
 //SHORTEST PATH ALGORITHM GOES HERE
 void MainWindow::on_shortestPathButton_clicked()
-{   
+{    
+    //this attempt will try to add all ditances to a matrix, in the findshortestdistance function we will perform a check before returning
+    //number of restaurants to be optimized
+    int n = ui->customEditRestaurantListWidget->count();
+    int k = restaurantsVector[0].getDistanceSize();
 
-    //**********************************************************************************************
-    //* FIND THE RESTAURANTS THAT NEED TO BE VISITED AND UN-NULLIFY THEM
-    //**********************************************************************************************
+    bool found = false;
 
+    int i = 0; //incrementer for iterating through EVERY element in the restaurant list widget
+    int j = 0; //incrementer for iterating through restaurant vector until it matches
 
-    for(int i = 0; i < 11; i++)
+    //resize each row to be the right length
+    distanceMatrix.resize(k);
+
+    //first step is to load the restaurant distances into a 2D vector of distances
+    for(i = 0; i < k; i++)
     {
-        nullifiedLocations.push_back(i);
-    }
+        //fill up nullified indexes with all indexes, used later in code
+        nullifiedIndexes.push_back(i);
 
+        //resize each column to be the right height
+        distanceMatrix[i].resize(k);
+        for(j = 0; j < k; j++)
+        {
+            distanceMatrix[i][j] = restaurantsVector[i].getDistance(j);
+        }
+    }
+    i = 0;
+    j = 0;
+
+
+    //perform the shortest distance algorithm, re-orders the list widget (or may need to return a queue and begin trip) 
+    //aquire starting posistion
+    QString startname = ui->customEditRestaurantListWidget->item(0)->text();
+    int startingIndex = 0;
+    while(!found && i < restaurantsVector.size())
+    {
+        if(ui->customEditRestaurantListWidget->item(0)->text() == restaurantsVector[i].getName())
+        {
+            startingIndex = restaurantsVector[i].getId();
+            found = true;
+        }
+        else
+        {
+            ++i;
+        }
+    }
+    i = 0;
+    found = false;
+
+
+    //UN-nullify restaurants we want to visit
     int count;
-    bool found;
-    //activate locations by iterating through editrestaurantlistwidget
-    for(int i = 0; i < ui->customEditRestaurantListWidget->count(); i++)
+    for(i = 0; i < n; i++)
     {
         //find index of the item in the list widget, and pop that from nullifiedlocations vector
         count = 0;
@@ -464,12 +557,10 @@ void MainWindow::on_shortestPathButton_clicked()
         //must perform search to add the correct restaurants to the queue
         while(!found && count < restaurantsVector.size())
         {
-
-
             if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
             {
                 //when the names match, remove the index from the nullifiedlocations vector
-                nullifiedLocations.remove(count);
+                nullifiedIndexes[count] = 0;
                 found = true;
             }
             else
@@ -479,53 +570,14 @@ void MainWindow::on_shortestPathButton_clicked()
         }
     }
 
-    //QTextStream(stdout) << "created nullifiedlocations vector" << endl;
-
-
-    //**********************************************************************************************
-    //* FILL MATRIX WITH ALL DISTANCES
-    //**********************************************************************************************
-
-    //fill 2d array with distances
-    //insert all distances into the 2d matrix
-
-    //***** CHANGE THIS .SIZE ***
-    for(int i = 0; i < restaurantsVector.size(); i++)
-    {
-        //fill matrix
-        for(int j = 0; j < restaurantsVector.size(); j++)
-        {
-            //test that the matrix has been filled properly
-            if(!null(i) && !null(j))
-            {
-                QTextStream(stdout) << "created nullifiedlocations vector" << endl;
-                distanceMatrix[i][j] = restaurantsVector[j].getDistance(i);
-                QTextStream(stdout) << distanceMatrix[i][j] << endl;
-            }
-        }
-    }
-
-    //**********************************************************************************************
-    //* RUN SHORTEST PATH ALGORITHM ON NON-NULL RESTAURANTS
-    //**********************************************************************************************
-
-    //begin at saddleback 0,0
-    //search row for smallest distance
-    //after finding smallest distance, travel to the columnth row
-    //nullify columnth column
 
     ui->customEditRestaurantListWidget->clear();
+    ui->customEditRestaurantListWidget->addItem(startname);
 
-    //initialize row and column to starting positions, default to saddleback
-    int row = 0;
-    ui->customEditRestaurantListWidget->addItem(restaurantsVector[row].getName());
-    nullifiedLocations.push_back(row);
+    optimizePath(startingIndex, n);
 
-    while(nullifiedLocations.size() < restaurantsVector.size())
-    {
-        row = findShortestDistance(row);
-        ui->customEditRestaurantListWidget->addItem(restaurantsVector[row].getName());
-        nullifiedLocations.push_back(row);
+    nullifiedIndexes.clear();
 
-    }
 }
+
+
