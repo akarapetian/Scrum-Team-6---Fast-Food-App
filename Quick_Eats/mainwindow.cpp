@@ -31,22 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->customEditRestaurantListWidget->setDropIndicatorShown(true);
 
 
-
-//    myTrips.push_back(trip("Mac Man"));
-//    myTrips[0].addLocation(restaurantsVector[0]);
-//    myTrips[0].addLocation(restaurantsVector[1]);
-//    myTrips[0].addLocation(restaurantsVector[2]);
-
-//    myTrips.push_back(trip("Wendy Woman"));
-//    myTrips[1].addLocation(restaurantsVector[1]);
-//    myTrips[1].addLocation(restaurantsVector[0]);
-//    myTrips[1].addLocation(restaurantsVector[2]);
-
-//    myTrips.push_back(trip("Dog Dude"));
-//    myTrips[2].addLocation(restaurantsVector[2]);
-//    myTrips[2].addLocation(restaurantsVector[1]);
-//    myTrips[2].addLocation(restaurantsVector[0]);
-
 //    for(int i  = 0; i < myTrips.size();i++)
 //        ui->myTripsListWidget->addItem(myTrips[i].getName());
 
@@ -579,5 +563,4 @@ void MainWindow::on_shortestPathButton_clicked()
     nullifiedIndexes.clear();
 
 }
-
 
