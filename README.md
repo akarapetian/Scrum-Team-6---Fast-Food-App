@@ -15,3 +15,6 @@ This repository has 5 primary branches. One for each team member and a master br
 - Sean Cox           : Scrum Master
 - Anthony Karapetian
 - Utkarsh Karki
+
+# Bugs
+- program is crashing after running shortest path algorithm in debug mode
