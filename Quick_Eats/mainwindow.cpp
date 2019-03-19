@@ -31,6 +31,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->customEditRestaurantListWidget->setDropIndicatorShown(true);
 
 
+
+//    myTrips.push_back(trip("Mac Man"));
+//    myTrips[0].addLocation(restaurantsVector[0]);
+//    myTrips[0].addLocation(restaurantsVector[1]);
+//    myTrips[0].addLocation(restaurantsVector[2]);
+
+//    myTrips.push_back(trip("Wendy Woman"));
+//    myTrips[1].addLocation(restaurantsVector[1]);
+//    myTrips[1].addLocation(restaurantsVector[0]);
+//    myTrips[1].addLocation(restaurantsVector[2]);
+
+//    myTrips.push_back(trip("Dog Dude"));
+//    myTrips[2].addLocation(restaurantsVector[2]);
+//    myTrips[2].addLocation(restaurantsVector[1]);
+//    myTrips[2].addLocation(restaurantsVector[0]);
+
 //    for(int i  = 0; i < myTrips.size();i++)
 //        ui->myTripsListWidget->addItem(myTrips[i].getName());
 
@@ -363,6 +379,7 @@ void MainWindow::on_MWTakeTripButton_clicked()
     }
 
     ui->MWStackedWidget->setCurrentIndex(1);
+    ui->TakeTripStackedWidget->setCurrentIndex(0);
 }
 
 
@@ -405,36 +422,6 @@ void MainWindow::on_customSelectRestaurantListWidget_itemChanged(QListWidgetItem
 
 
 
-void MainWindow::on_customTakeTripButton_clicked()
-{
-    //change screen to the trip page
-    ui->TakeTripStackedWidget->setCurrentIndex(3);
-
-
-    //fill up the currentrip queue with the items in the user-ordered restaurant list
-    int count;
-    bool found = false;
-
-    for(int i = 0; i < ui->customEditRestaurantListWidget->count(); i++)
-    {
-        count = 0;
-        found = false;
-        //must perform search to add the correct restaurants to the queue
-        while(!found && count < restaurantsVector.size())
-        {
-            if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
-            {
-                //when the names match, add the restaurant to the current trip
-                currentTrip.enqueue(restaurantsVector[count]);
-                found = true;
-            }
-            else
-            {
-                ++count;
-            }
-        }
-    }
-}
 
 bool MainWindow::validIndex(int i)
 {
@@ -544,7 +531,7 @@ void MainWindow::on_shortestPathButton_clicked()
             if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
             {
                 //when the names match, remove the index from the nullifiedlocations vector
-                nullifiedIndexes[count] = 0;
+                nullifiedIndexes[count] = -1;
                 found = true;
             }
             else
@@ -556,7 +543,8 @@ void MainWindow::on_shortestPathButton_clicked()
 
 
     ui->customEditRestaurantListWidget->clear();
-    ui->customEditRestaurantListWidget->addItem(startname);
+    //ui->customEditRestaurantListWidget->addItem(startname);
+    //nullifiedIndexes[startingIndex] = -1;
 
     optimizePath(startingIndex, n);
 
@@ -564,3 +552,190 @@ void MainWindow::on_shortestPathButton_clicked()
 
 }
 
+void MainWindow::on_customTakeTripButton_clicked()
+{
+    //fill up the currentrip queue with the items in the user-ordered restaurant list
+    int count;
+    bool found = false;
+
+    for(int i = 0; i < ui->customEditRestaurantListWidget->count(); i++)
+    {
+        count = 0;
+        found = false;
+        //must perform search to add the correct restaurants to the queue
+        while(!found && count < restaurantsVector.size())
+        {
+            if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
+            {
+                //when the names match, add the restaurant to the current trip
+                currentTrip.addLocation(restaurantsVector[count]);
+                found = true;
+            }
+            else
+            {
+                ++count;
+            }
+        }
+    }
+
+
+
+
+    //change screen to the trip page
+    ui->TakeTripStackedWidget->setCurrentIndex(1);
+
+    nextRestaurant();
+
+}
+
+//*************************************************************
+//IN THE RESTAURANT METHODS
+//*************************************************************
+
+void MainWindow::nextRestaurant()
+{
+    if(currentTrip.getCurrentLocation().getName() == "Saddleback College")
+    {
+        //if were at saddleback, frontend looks quite different
+        //for now we may just pop saddleback from the queue // ************************************** < needs to get changed
+        currentTrip.removeLocation();
+    }
+
+    // --- initialize data in the page --
+    ui->currentLocationLabel->setText(currentTrip.getCurrentLocation().getName());
+
+    for(int i = 0; i < currentTrip.getCurrentLocation().getMenuSize(); i++)
+    {
+        ui->currentLocationMenuItemListWidget->addItem(currentTrip.getCurrentLocation().menu[i].itemName);
+        ui->currentLocationMenuPriceListWidget->addItem(QString::number(currentTrip.getCurrentLocation().menu[i].price));
+        ui->currentLocationMenuItemListWidget->item(i)->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        ui->currentLocationMenuItemListWidget->item(i)->setCheckState(Qt::Unchecked);
+    }
+    ui->subTotalLabel->setText(QString::number(0));
+}
+
+float MainWindow::getSubTotal()
+{
+    float sum = 0;
+
+    for(int i = 0; i < ui->myOrderQuantityListWidget->count(); i++)
+    {
+        //perform search to match up quanitty with correct price
+        bool found = false;
+        int j = 0;
+
+        while(!found && j < ui->currentLocationMenuPriceListWidget->count())
+        {
+            if(ui->myOrderItemListWidget->item(i)->text() == ui->currentLocationMenuItemListWidget->item(j)->text())
+            {
+                //item is found
+                found = true;
+                sum += ui->myOrderQuantityListWidget->item(i)->text().toInt() * ui->currentLocationMenuPriceListWidget->item(j)->text().toFloat();
+            }
+            else
+            {
+                ++j;
+            }
+        }
+    }
+
+    return sum;
+}
+
+
+//allowing for multiple ways to change the quantity of a purchase, you can double click on the item to add it
+//or you can direct edit by double clicking on the quantity you want to change
+void MainWindow::on_currentLocationMenuItemListWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    bool found = false;
+    int i = 0;
+
+    while(!found && i < ui->myOrderItemListWidget->count())
+    {
+        if(item->text() == ui->myOrderItemListWidget->item(i)->text())
+        {
+            //item is found
+            found = true;
+        }
+        else
+        {
+            ++i;
+        }
+    }
+
+    if(!found)
+    {
+        //if list widget doesnt contain the item
+        ui->myOrderItemListWidget->addItem(item->text());
+        ui->myOrderQuantityListWidget->addItem(QString::number(1));
+        item->setCheckState(Qt::Checked);
+
+
+    }
+    else
+    {
+        ui->myOrderQuantityListWidget->item(i)->setText(QString::number(ui->myOrderQuantityListWidget->item(i)->text().toInt() + 1));
+    }
+    ui->subTotalLabel->setText(QString::number(getSubTotal()));
+}
+
+void MainWindow::on_myOrderQuantityListWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    //allow editing of the item price if double clicked
+    ui->myOrderQuantityListWidget->openPersistentEditor(item);
+}
+
+void MainWindow::on_currentLocationMenuItemListWidget_itemChanged(QListWidgetItem *item)
+{
+    //perform search for the item to be removed
+    int i = 0;
+    bool found = false;
+
+    while(!found && i < ui->myOrderItemListWidget->count())
+    {
+        if(item->text() == ui->myOrderItemListWidget->item(i)->text())
+        {
+            found = true;
+
+        }
+        else
+        {
+            ++i;
+        }
+    }
+
+    //if the item gets checked, it is added to the cart
+    //if item is checked it adds it to the secondary list
+    if(item->checkState() == 2 && !found)
+    {
+        ui->myOrderItemListWidget->addItem(item->text());
+        ui->myOrderQuantityListWidget->addItem(QString::number(1));
+
+        //ui->customEditRestaurantListWidget->item(ui->customEditRestaurantListWidget->count() - 1)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+
+        //QTextStream(stdout) <<  ui->customEditRestaurantListWidget->item(ui->customEditRestaurantListWidget->count() - 1)->text()  << ui->customEditRestaurantListWidget->dragDropMode() << endl;
+
+    }
+    else if (item->checkState() == 0) //if item is unchecked
+    {
+        ui->myOrderItemListWidget->takeItem(i);
+        ui->myOrderQuantityListWidget->takeItem(i);
+    }
+    ui->subTotalLabel->setText(QString::number(getSubTotal()));
+}
+
+void MainWindow::on_checkOutButton_clicked()
+{
+    //incremrent trip total
+
+    currentTrip.setTotalCost(currentTrip.getTotalCost() + ui->subTotalLabel->text().toFloat());
+    //currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + //distance from current restaurant to next restaurant
+    currentTrip.removeLocation();
+
+    ui->currentLocationMenuItemListWidget->clear();
+    ui->currentLocationMenuPriceListWidget->clear();
+    ui->myOrderItemListWidget->clear();
+    ui->myOrderQuantityListWidget->clear();
+
+    nextRestaurant();
+}
