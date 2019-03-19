@@ -31,7 +31,8 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     restaurant.h \
-    trip.h
+    trip.h \
+    shoppingcart.h
 
 FORMS += \
         mainwindow.ui
@@ -40,3 +41,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    data2.txt

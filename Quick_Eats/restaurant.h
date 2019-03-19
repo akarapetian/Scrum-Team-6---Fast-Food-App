@@ -27,19 +27,13 @@ public:
     restaurant(){
         id = 0;
         name = "";
-        distanceSize = 0;
-        distance[0] = {0};
     }
 
-    restaurant(int newId, QString newName, int newDistanceSize, int newDistance[], QVector<item> newMenu){
+    restaurant(int newId, QString newName, QVector<float> newDistance, QVector<item> newMenu){
         id = newId;
         name = newName;
-        distanceSize = newDistanceSize;
-        for(int i = 0; i < newDistanceSize; i++)
-        {
-            distance[i] = newDistance[i];
-        }
         menu = newMenu;
+        distance = newDistance;
     }
 
     ~restaurant(){
@@ -48,13 +42,9 @@ public:
     //MUTATORS
     void changeId(int new_id){id = new_id;}
     void changeName(QString new_name){name = new_name;}
-    void changeDistanceSize(int new_distSize){distanceSize = new_distSize;}
-    void addDistance(int new_distance){distance[distanceSize] = new_distance;distanceSize++;}
+    void addDistance(int new_distance){distance[getDistanceSize()] = new_distance;}
     void removeDistance(int key){
-        for(int i =key;i<distanceSize;i++){
-            distance[i] = distance[i+1];
-        }
-        distanceSize--;
+        distance.remove(key);
     }
 
     void addMenuItem(QString iName,float iPrice,int iId){     
@@ -91,16 +81,17 @@ public:
     QString getName()const{return name;}
     int getMenuSize()const{return menu.size();}
     float getDistance(int key)const{return distance[key];}
-    int getDistanceSize(){return distanceSize;}
+    int getDistanceSize(){return distance.size();}
 
     //must be public at this moment
     QVector<item> menu; //menu vector (vector of items)
-
+    QVector<float> distance;
 private:
     int id;          //Unique ID of restaurant
     QString name;     //name of restaurant
-    int distanceSize; //Number of restaurants
-    float distance[11]; //Index 0 in this array is always going to be distance from saddleback.
+
+    //THIS IS WHERE THE ERROR WAS (distance was declared to be size 10)
+    //QVector<float> distance; //Index 0 in this array is always going to be distance from saddleback.
 };
 
 #endif // RESTAURANT_H

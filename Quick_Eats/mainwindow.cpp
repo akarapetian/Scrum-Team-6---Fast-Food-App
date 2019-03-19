@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    readRestaurantFile();
+
     //initialize all the pages to the first page
     ui->primaryPageStackedWidget->setCurrentIndex(0);
     ui->loginStackedWidget->setCurrentIndex(0);
@@ -28,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->customEditRestaurantListWidget->viewport()->setAcceptDrops(true);
     ui->customEditRestaurantListWidget->setDropIndicatorShown(true);
 
-    readRestaurantFile(restaurantsVector);
+
 
 //    myTrips.push_back(trip("Mac Man"));
 //    myTrips[0].addLocation(restaurantsVector[0]);
@@ -59,8 +61,97 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    //writeRestaurantFile();
     delete ui;
 }
+
+void MainWindow::writeRestaurantFile(){
+    QFile file("/Users/alekperatoner/Desktop/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QMessageBox::information(nullptr, "error", file.errorString());
+    }
+    else{
+
+        QTextStream out(&file);
+
+        out << restaurantsVector[0].distance.size() << endl; //the way we have the file reading set up is built in a way such that it reads the size of how many distances per restaurant there are first since that is an independent variable from the rest of the rest. class, so im just taking the distance size of the first element since they are all the same size and placing it
+        for(int i = 0; i < restaurantsVector.size(); i++){
+            out << restaurantsVector[i].getName() << endl;
+            out << restaurantsVector[i].getId() << endl;
+            for(int j = 0; j < restaurantsVector[0].getDistanceSize(); j++){
+                out << restaurantsVector[i].distance[j] << endl;
+            }
+            out << restaurantsVector[i].menu.size() << endl;
+            for(int j = 0; j < restaurantsVector[i].menu.size(); j++){
+                out << restaurantsVector[i].menu[j].itemName << endl;
+                out << restaurantsVector[i].menu[j].price << endl;
+            }
+            out << endl;
+        }
+    }
+}
+
+void MainWindow::readRestaurantFile(){
+
+    QFile file("/Users/alekperatoner/Desktop/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+
+    QString tempRest;
+    QVector<item> tempMenu;
+    QString tempItem;
+    float tempPrice = 0;
+    int tempId = 0;
+    int menuSize = 0;
+    QTextStream in(&file);
+    QString line;
+    int newDistanceSize;
+    QVector<float> tempDistance;
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QMessageBox::information(nullptr, "error", file.errorString());
+    }
+    else{
+        line = in.readLine();
+        newDistanceSize = line.toInt();
+
+        while(!in.atEnd()){
+            line = in.readLine();
+            tempRest = line;
+            line = in.readLine();
+            tempId = line.toInt();
+
+            for(int i = 0; i < newDistanceSize; i++){
+                line = in.readLine();
+                tempDistance.push_back(line.toFloat());
+            }
+            line = in.readLine();
+            menuSize = line.toInt();
+            for(int j = 0; j < menuSize; j++){
+                line = in.readLine();
+                tempItem = line;
+                line = in.readLine();
+                tempPrice = line.toFloat();
+                tempMenu.push_back(item(tempItem, tempPrice, j));
+            }
+            line = in.readLine();
+
+            if(line.isEmpty()){
+                restaurantsVector.push_back(restaurant(tempId, tempRest, tempDistance, tempMenu));
+                tempMenu.clear();
+                tempRest = "";
+                tempId = 0;
+                for(int i = 0; i < newDistanceSize; i++){
+                    tempDistance.clear();
+                }
+                menuSize = 0;
+                line.clear();
+                tempRest.clear();
+            }
+        }
+    }
+    file.close();
+}
+
 
 void MainWindow::on_mainLoginButton_clicked()
 {
@@ -210,8 +301,10 @@ void MainWindow::on_addRestaurantButton_clicked()
     ui->addRestaurantStackedWidget->setCurrentIndex(1);
 }
 
+//need to go back and make this function parse the second text file
 void MainWindow::on_addButton_clicked()
 {
+    /*
     if(ui->newRestaurantNameLineEdit->text() != "")
     {
         QVector<item> newMenu;
@@ -220,6 +313,7 @@ void MainWindow::on_addButton_clicked()
     }
     ui->newRestaurantNameLineEdit->clear();
     ui->addRestaurantStackedWidget->setCurrentIndex(0);
+    */
 }
 
 void MainWindow::on_manageMenuListWidget_itemDoubleClicked(QListWidgetItem *item)
@@ -313,6 +407,7 @@ void MainWindow::on_MWTakeTripButton_clicked()
     }
 
     ui->MWStackedWidget->setCurrentIndex(1);
+    ui->TakeTripStackedWidget->setCurrentIndex(0);
 }
 
 
@@ -355,12 +450,138 @@ void MainWindow::on_customSelectRestaurantListWidget_itemChanged(QListWidgetItem
 
 
 
+
+bool MainWindow::validIndex(int i)
+{
+    bool valid = true;
+
+    //if i exists in a list of nullified indexes, valid = false;
+   for(int count = 0; count < nullifiedIndexes.size(); count++)
+   {
+       if(i == nullifiedIndexes[count])
+       {
+           valid = false;
+       }
+   }
+    return valid;
+}
+
+//recursive version
+void MainWindow::optimizePath(int j, int n)
+{
+    //iterate through the whole row and return the index of the smallest number
+    int index = 0;
+    float minimumDistance =  100000000;
+
+    for(int i = 0; i < restaurantsVector[0].getDistanceSize(); i++)
+    {
+        if(minimumDistance > distanceMatrix[j][i] && validIndex(i))
+        {
+            //new minimum distance
+            minimumDistance = distanceMatrix[j][i];
+            index = i;
+        }
+    }
+
+    //add item to listwidget
+    ui->customEditRestaurantListWidget->addItem(restaurantsVector[index].getName());
+    nullifiedIndexes.push_back(index);
+
+    if(ui->customEditRestaurantListWidget->count() < n)
+    {
+        optimizePath(index, n);
+    }
+}
+
+//SHORTEST PATH ALGORITHM GOES HERE
+void MainWindow::on_shortestPathButton_clicked()
+{    
+    //this attempt will try to add all ditances to a matrix, in the findshortestdistance function we will perform a check before returning
+    //number of restaurants to be optimized
+    int n = ui->customEditRestaurantListWidget->count();
+    int k = restaurantsVector[0].getDistanceSize();
+
+    bool found = false;
+
+    int i = 0; //incrementer for iterating through EVERY element in the restaurant list widget
+    int j = 0; //incrementer for iterating through restaurant vector until it matches
+
+    //resize each row to be the right length
+    distanceMatrix.resize(k);
+
+    //first step is to load the restaurant distances into a 2D vector of distances
+    for(i = 0; i < k; i++)
+    {
+        //fill up nullified indexes with all indexes, used later in code
+        nullifiedIndexes.push_back(i);
+
+        //resize each column to be the right height
+        distanceMatrix[i].resize(k);
+        for(j = 0; j < k; j++)
+        {
+            distanceMatrix[i][j] = restaurantsVector[i].getDistance(j);
+        }
+    }
+    i = 0;
+    j = 0;
+
+
+    //perform the shortest distance algorithm, re-orders the list widget (or may need to return a queue and begin trip) 
+    //aquire starting posistion
+    QString startname = ui->customEditRestaurantListWidget->item(0)->text();
+    int startingIndex = 0;
+    while(!found && i < restaurantsVector.size())
+    {
+        if(ui->customEditRestaurantListWidget->item(0)->text() == restaurantsVector[i].getName())
+        {
+            startingIndex = restaurantsVector[i].getId();
+            found = true;
+        }
+        else
+        {
+            ++i;
+        }
+    }
+    i = 0;
+    found = false;
+
+
+    //UN-nullify restaurants we want to visit
+    int count;
+    for(i = 0; i < n; i++)
+    {
+        //find index of the item in the list widget, and pop that from nullifiedlocations vector
+        count = 0;
+        found = false;
+        //must perform search to add the correct restaurants to the queue
+        while(!found && count < restaurantsVector.size())
+        {
+            if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
+            {
+                //when the names match, remove the index from the nullifiedlocations vector
+                nullifiedIndexes[count] = -1;
+                found = true;
+            }
+            else
+            {
+                ++count;
+            }
+        }
+    }
+
+
+    ui->customEditRestaurantListWidget->clear();
+    //ui->customEditRestaurantListWidget->addItem(startname);
+    //nullifiedIndexes[startingIndex] = -1;
+
+    optimizePath(startingIndex, n);
+
+    nullifiedIndexes.clear();
+
+}
+
 void MainWindow::on_customTakeTripButton_clicked()
 {
-    //change screen to the trip page
-    ui->TakeTripStackedWidget->setCurrentIndex(3);
-
-
     //fill up the currentrip queue with the items in the user-ordered restaurant list
     int count;
     bool found = false;
@@ -375,7 +596,7 @@ void MainWindow::on_customTakeTripButton_clicked()
             if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
             {
                 //when the names match, add the restaurant to the current trip
-                currentTrip.enqueue(restaurantsVector[count]);
+                currentTrip.addLocation(restaurantsVector[count]);
                 found = true;
             }
             else
@@ -384,184 +605,165 @@ void MainWindow::on_customTakeTripButton_clicked()
             }
         }
     }
+
+
+
+
+    //change screen to the trip page
+    ui->TakeTripStackedWidget->setCurrentIndex(1);
+
+    nextRestaurant();
+
+}
+
+//*************************************************************
+//IN THE RESTAURANT METHODS
+//*************************************************************
+
+void MainWindow::nextRestaurant()
+{
+    if(currentTrip.getCurrentLocation().getName() == "Saddleback College")
+    {
+        //if were at saddleback, frontend looks quite different
+        //for now we may just pop saddleback from the queue // ************************************** < needs to get changed
+        currentTrip.removeLocation();
+    }
+
+    // --- initialize data in the page --
+    ui->currentLocationLabel->setText(currentTrip.getCurrentLocation().getName());
+
+    for(int i = 0; i < currentTrip.getCurrentLocation().getMenuSize(); i++)
+    {
+        ui->currentLocationMenuItemListWidget->addItem(currentTrip.getCurrentLocation().menu[i].itemName);
+        ui->currentLocationMenuPriceListWidget->addItem(QString::number(currentTrip.getCurrentLocation().menu[i].price));
+        ui->currentLocationMenuItemListWidget->item(i)->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        ui->currentLocationMenuItemListWidget->item(i)->setCheckState(Qt::Unchecked);
+    }
+    ui->subTotalLabel->setText(QString::number(0));
+}
+
+float MainWindow::getSubTotal()
+{
+    float sum = 0;
+
+    for(int i = 0; i < ui->myOrderQuantityListWidget->count(); i++)
+    {
+        //perform search to match up quanitty with correct price
+        bool found = false;
+        int j = 0;
+
+        while(!found && j < ui->currentLocationMenuPriceListWidget->count())
+        {
+            if(ui->myOrderItemListWidget->item(i)->text() == ui->currentLocationMenuItemListWidget->item(j)->text())
+            {
+                //item is found
+                found = true;
+                sum += ui->myOrderQuantityListWidget->item(i)->text().toInt() * ui->currentLocationMenuPriceListWidget->item(j)->text().toFloat();
+            }
+            else
+            {
+                ++j;
+            }
+        }
+    }
+
+    return sum;
 }
 
 
-bool MainWindow::null(int index)
+//allowing for multiple ways to change the quantity of a purchase, you can double click on the item to add it
+//or you can direct edit by double clicking on the quantity you want to change
+void MainWindow::on_currentLocationMenuItemListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-    //perform sequential search on nullified vector
     bool found = false;
-    for(int i = 0; i < nullifiedLocations.size(); i++)
+    int i = 0;
+
+    while(!found && i < ui->myOrderItemListWidget->count())
     {
-        if(index == nullifiedLocations[i])
+        if(item->text() == ui->myOrderItemListWidget->item(i)->text())
         {
+            //item is found
             found = true;
         }
+        else
+        {
+            ++i;
+        }
     }
-    return found;
+
+    if(!found)
+    {
+        //if list widget doesnt contain the item
+        ui->myOrderItemListWidget->addItem(item->text());
+        ui->myOrderQuantityListWidget->addItem(QString::number(1));
+        item->setCheckState(Qt::Checked);
+
+
+    }
+    else
+    {
+        ui->myOrderQuantityListWidget->item(i)->setText(QString::number(ui->myOrderQuantityListWidget->item(i)->text().toInt() + 1));
+    }
+    ui->subTotalLabel->setText(QString::number(getSubTotal()));
 }
 
-//returns the column corresponding to the shortest distance
-int MainWindow::findShortestDistance(int row)
+void MainWindow::on_myOrderQuantityListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-
-    int index = 0;
-    float minimumDistance =  distanceMatrix[row][0];
-
-    for(int column = 1; column < 11; column++)
-    {
-        if(minimumDistance > distanceMatrix[row][column])
-        {
-            //new minimum distance
-            minimumDistance = distanceMatrix[row][column];
-            index = column;
-        }
-    }
-
-    return index;
+    //allow editing of the item price if double clicked
+    ui->myOrderQuantityListWidget->openPersistentEditor(item);
 }
 
-//SHORTEST PATH ALGORITHM GOES HERE
-void MainWindow::on_shortestPathButton_clicked()
-{   
+void MainWindow::on_currentLocationMenuItemListWidget_itemChanged(QListWidgetItem *item)
+{
+    //perform search for the item to be removed
+    int i = 0;
+    bool found = false;
 
-    //**********************************************************************************************
-    //* FIND THE RESTAURANTS THAT NEED TO BE VISITED AND UN-NULLIFY THEM
-    //**********************************************************************************************
-
-
-    for(int i = 0; i < 11; i++)
+    while(!found && i < ui->myOrderItemListWidget->count())
     {
-        nullifiedLocations.push_back(i);
-    }
-
-    int count;
-    bool found;
-    //activate locations by iterating through editrestaurantlistwidget
-    for(int i = 0; i < ui->customEditRestaurantListWidget->count(); i++)
-    {
-        //find index of the item in the list widget, and pop that from nullifiedlocations vector
-        count = 0;
-        found = false;
-        //must perform search to add the correct restaurants to the queue
-        while(!found && count < restaurantsVector.size())
+        if(item->text() == ui->myOrderItemListWidget->item(i)->text())
         {
+            found = true;
 
-
-            if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
-            {
-                //when the names match, remove the index from the nullifiedlocations vector
-                nullifiedLocations.remove(count);
-                found = true;
-            }
-            else
-            {
-                ++count;
-            }
+        }
+        else
+        {
+            ++i;
         }
     }
 
-    //QTextStream(stdout) << "created nullifiedlocations vector" << endl;
-
-
-    //**********************************************************************************************
-    //* FILL MATRIX WITH ALL DISTANCES
-    //**********************************************************************************************
-
-    //fill 2d array with distances
-    //insert all distances into the 2d matrix
-
-    //***** CHANGE THIS .SIZE ***
-    for(int i = 0; i < restaurantsVector.size(); i++)
+    //if the item gets checked, it is added to the cart
+    //if item is checked it adds it to the secondary list
+    if(item->checkState() == 2 && !found)
     {
-        //fill matrix
-        for(int j = 0; j < restaurantsVector.size(); j++)
-        {
-            //test that the matrix has been filled properly
-            if(!null(i) && !null(j))
-            {
-                QTextStream(stdout) << "created nullifiedlocations vector" << endl;
-                distanceMatrix[i][j] = restaurantsVector[j].getDistance(i);
-                QTextStream(stdout) << distanceMatrix[i][j] << endl;
-            }
-        }
-    }
+        ui->myOrderItemListWidget->addItem(item->text());
+        ui->myOrderQuantityListWidget->addItem(QString::number(1));
 
-    //**********************************************************************************************
-    //* RUN SHORTEST PATH ALGORITHM ON NON-NULL RESTAURANTS
-    //**********************************************************************************************
+        //ui->customEditRestaurantListWidget->item(ui->customEditRestaurantListWidget->count() - 1)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
 
-    //begin at saddleback 0,0
-    //search row for smallest distance
-    //after finding smallest distance, travel to the columnth row
-    //nullify columnth column
-
-    ui->customEditRestaurantListWidget->clear();
-
-    //initialize row and column to starting positions, default to saddleback
-    int row = 0;
-    ui->customEditRestaurantListWidget->addItem(restaurantsVector[row].getName());
-    nullifiedLocations.push_back(row);
-
-    while(nullifiedLocations.size() < restaurantsVector.size())
-    {
-        row = findShortestDistance(row);
-        ui->customEditRestaurantListWidget->addItem(restaurantsVector[row].getName());
-        nullifiedLocations.push_back(row);
+        //QTextStream(stdout) <<  ui->customEditRestaurantListWidget->item(ui->customEditRestaurantListWidget->count() - 1)->text()  << ui->customEditRestaurantListWidget->dragDropMode() << endl;
 
     }
+    else if (item->checkState() == 0) //if item is unchecked
+    {
+        ui->myOrderItemListWidget->takeItem(i);
+        ui->myOrderQuantityListWidget->takeItem(i);
+    }
+    ui->subTotalLabel->setText(QString::number(getSubTotal()));
 }
 
-void MainWindow::readRestaurantFile(QVector<restaurant>& rest){
+void MainWindow::on_checkOutButton_clicked()
+{
+    //incremrent trip total
 
-    QFile file("/Users/alekperatoner/Desktop/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+    currentTrip.setTotalCost(currentTrip.getTotalCost() + ui->subTotalLabel->text().toFloat());
+    //currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + //distance from current restaurant to next restaurant
+    currentTrip.removeLocation();
 
-    QString tempRest;
-    QVector<item> tempMenu;
-    QString tempItem;
-    float tempPrice = 0;
-    int tempId = 0;
-    int menuSize = 0;
-    QTextStream in(&file);
-    QString line;
-    int newDistanceSize;
+    ui->currentLocationMenuItemListWidget->clear();
+    ui->currentLocationMenuPriceListWidget->clear();
+    ui->myOrderItemListWidget->clear();
+    ui->myOrderQuantityListWidget->clear();
 
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        QMessageBox::information(0, "error", file.errorString());
-    }
-    else{
-        line = in.readLine();
-        newDistanceSize = line.toInt();
-
-        int tempDistance[newDistanceSize];
-        while(!in.atEnd()){
-            line = in.readLine();
-            tempRest = line;
-            line = in.readLine();
-            tempId = line.toInt();
-            for(int i = 0; i < newDistanceSize; i++){
-                line = in.readLine();
-                tempDistance[i] = line.toInt();
-            }
-            line = in.readLine();
-            menuSize = line.toInt();
-            for(int j = 0; j < menuSize; j++){
-                line = in.readLine();
-                tempItem = line;
-                line = in.readLine();
-                tempPrice = line.toFloat();
-                tempMenu.push_back(item(tempItem, tempPrice, j));
-            }
-            line = in.readLine();
-            if(line.isEmpty()){
-                rest.push_back(restaurant(tempId, tempRest, newDistanceSize, tempDistance, tempMenu));
-                tempMenu.clear();
-            }
-        }
-    }
-
-
-
-    file.close();
+    nextRestaurant();
 }
-
