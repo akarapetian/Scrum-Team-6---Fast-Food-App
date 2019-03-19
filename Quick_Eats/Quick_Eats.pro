@@ -31,7 +31,8 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     restaurant.h \
-    trip.h
+    trip.h \
+    shoppingcart.h
 
 FORMS += \
         mainwindow.ui

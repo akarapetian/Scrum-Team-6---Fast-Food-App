@@ -58,13 +58,14 @@ private slots:
 
 
     void on_MWTakeTripButton_clicked();
-
     void on_customSelectRestaurantListWidget_itemChanged(QListWidgetItem *item);
-
     void on_customTakeTripButton_clicked();
-
     void on_shortestPathButton_clicked();
 
+
+
+    void nextRestaurant();
+    float getSubTotal();
 
     //SHORTEST PATH FUNCTIONS
     /*
@@ -75,6 +76,14 @@ private slots:
     void optimizePath(int j, int n); //searches a row for the shortest distance and returns the column
     bool validIndex(int i); //returns true if the index is alright to be operated on
 
+    void on_currentLocationMenuItemListWidget_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_myOrderQuantityListWidget_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_currentLocationMenuItemListWidget_itemChanged(QListWidgetItem *item);
+
+    void on_checkOutButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -82,11 +91,11 @@ private:
     QVector<restaurant> restaurantsVector;
 
     //queue that represents the trip the user is currently taking
-    QQueue<restaurant> currentTrip;
+    trip currentTrip;
 
     //this data structure holds all the custom trips that belong to a user
     //it is a vector of pointers, each pointing to a Queue of restaurants (the custom trip).
-    QVector<QQueue<restaurant>*> customTrips;
+    //QVector<QQueue<restaurant>*> customTrips;
 
     //this is an object, that holds a queue of vectors. Only made it so I could tie a name to a queue
     trip myTrip;
