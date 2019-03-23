@@ -736,8 +736,6 @@ void MainWindow::on_checkOutButton_clicked()
     {
         currentTrip.removeLocation();
 
-
-
         int nextRestaurantIndex = currentTrip.getCurrentLocation().getId();
 
         currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + restaurantsVector[previousRestaurantIndex].getDistance(nextRestaurantIndex));

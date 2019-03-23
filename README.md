@@ -15,3 +15,8 @@ This repository has 5 primary branches. One for each team member and a master br
 - Sean Cox           : Scrum Master
 - Anthony Karapetian
 - Utkarsh Karki
+
+# Bugs
+- program is crashing after running shortest path algorithm in debug mode
+- Need to add error checking to persistent editing features
+- Editing menu prices is quite buggy, not updating the restaurant selection on the pathing page properly
