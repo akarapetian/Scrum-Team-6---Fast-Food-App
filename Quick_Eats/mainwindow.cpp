@@ -60,7 +60,35 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    writeRestaurantFile();
     delete ui;
+}
+
+void MainWindow::writeRestaurantFile(){
+    QFile file("/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QMessageBox::information(nullptr, "error", file.errorString());
+    }
+    else{
+
+        QTextStream out(&file);
+
+        out << restaurantsVector[0].distance.size() << endl; //the way we have the file reading set up is built in a way such that it reads the size of how many distances per restaurant there are first since that is an independent variable from the rest of the rest. class, so im just taking the distance size of the first element since they are all the same size and placing it
+        for(int i = 0; i < restaurantsVector.size(); i++){
+            out << restaurantsVector[i].getName() << endl;
+            out << restaurantsVector[i].getId() << endl;
+            for(int j = 0; j < restaurantsVector[0].getDistanceSize(); j++){
+                out << restaurantsVector[i].distance[j] << endl;
+            }
+            out << restaurantsVector[i].menu.size() << endl;
+            for(int j = 0; j < restaurantsVector[i].menu.size(); j++){
+                out << restaurantsVector[i].menu[j].itemName << endl;
+                out << restaurantsVector[i].menu[j].price << endl;
+            }
+            out << endl;
+        }
+    }
 }
 
 void MainWindow::readRestaurantFile(){
@@ -305,7 +333,7 @@ void MainWindow::on_manageMenuListWidget_currentItemChanged(QListWidgetItem *cur
     if(ui->manageMenuListWidget->isPersistentEditorOpen(previous))
     {
         ui->manageMenuListWidget->closePersistentEditor(previous);
-        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[ui->manageMenuListWidget->currentRow()].itemName = previous->text();
+        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[previous->listWidget()->row(previous)].itemName = previous->text();
     }
 }
 
@@ -315,7 +343,7 @@ void MainWindow::on_manageMenuPriceListWidget_currentItemChanged(QListWidgetItem
     if(ui->manageMenuPriceListWidget->isPersistentEditorOpen(previous))
     {
         ui->manageMenuPriceListWidget->closePersistentEditor(previous);
-        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[ui->manageMenuPriceListWidget->currentRow()].price = previous->text().toFloat();
+        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[previous->listWidget()->row(previous)].price = previous->text().toFloat();
     }
 }
 

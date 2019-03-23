@@ -26,6 +26,7 @@ public:
 private slots:
 
     //void readRestaurantFile(QVector<restaurant>&);
+    void writeRestaurantFile();
     void readRestaurantFile();
 
     //LOGIN FUNCTIONS
