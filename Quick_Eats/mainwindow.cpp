@@ -594,6 +594,7 @@ void MainWindow::on_customTakeTripButton_clicked()
 //need to track distances in here
 void MainWindow::nextRestaurant()
 {
+
     if(currentTrip.getCurrentLocation().getName() == "Saddleback College")
     {
         //if were at saddleback, frontend looks quite different
@@ -612,6 +613,10 @@ void MainWindow::nextRestaurant()
         ui->currentLocationMenuItemListWidget->item(i)->setCheckState(Qt::Unchecked);
     }
     ui->subTotalLabel->setText(QString::number(0));
+    ui->tripSizeLabel->setText(QString::number(currentTrip.getTripSize()));
+
+
+
 }
 
 float MainWindow::getSubTotal()
@@ -727,21 +732,32 @@ void MainWindow::on_checkOutButton_clicked()
 
     currentTrip.setTotalCost(currentTrip.getTotalCost() + ui->subTotalLabel->text().toFloat());
     //currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + //distance from current restaurant to next restaurant
-    currentTrip.removeLocation();
+    if(currentTrip.getTripSize() > 1)
+    {
+        currentTrip.removeLocation();
 
-    int nextRestaurantIndex = currentTrip.getCurrentLocation().getId();
+        int nextRestaurantIndex = currentTrip.getCurrentLocation().getId();
 
-    currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + restaurantsVector[previousRestaurantIndex].getDistance(nextRestaurantIndex));
+        currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + restaurantsVector[previousRestaurantIndex].getDistance(nextRestaurantIndex));
 
-    ui->totalLabel->setText(QString::number(currentTrip.getTotalCost()));
-    ui->totalDistanceLabel->setText(QString::number(currentTrip.getTotalDistanceTraveled()));
+        ui->totalLabel->setText(QString::number(currentTrip.getTotalCost()));
+        ui->totalDistanceLabel->setText(QString::number(currentTrip.getTotalDistanceTraveled()));
 
-    ui->currentLocationMenuItemListWidget->clear();
-    ui->currentLocationMenuPriceListWidget->clear();
-    ui->myOrderItemListWidget->clear();
-    ui->myOrderQuantityListWidget->clear();
+        ui->currentLocationMenuItemListWidget->clear();
+        ui->currentLocationMenuPriceListWidget->clear();
+        ui->myOrderItemListWidget->clear();
+        ui->myOrderQuantityListWidget->clear();
 
-    nextRestaurant();
+        nextRestaurant();
+    }
+    else
+    {
+        //trip has ended, bring user to final screen
+        ui->summaryPageTotalSpent->setText(QString::number(currentTrip.getTotalCost()));
+        ui->summaryPageTotalDistance->setText(QString::number(currentTrip.getTotalDistanceTraveled()));
+        ui->TakeTripStackedWidget->setCurrentIndex(2);
+
+    }
 }
 
 
