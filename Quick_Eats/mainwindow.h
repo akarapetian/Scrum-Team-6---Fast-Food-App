@@ -56,14 +56,14 @@ private slots:
     void on_deleteItemButton_clicked();
 
 
-
+    //Creating trip functions
     void on_MWTakeTripButton_clicked();
     void on_customSelectRestaurantListWidget_itemChanged(QListWidgetItem *item);
     void on_customTakeTripButton_clicked();
     void on_shortestPathButton_clicked();
 
 
-
+    //taking trip functions
     void nextRestaurant();
     float getSubTotal();
 
@@ -83,6 +83,8 @@ private slots:
     void on_currentLocationMenuItemListWidget_itemChanged(QListWidgetItem *item);
 
     void on_checkOutButton_clicked();
+
+    void on_pathPageBackButton_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -257,7 +257,7 @@
          </rect>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="customPathPage">
          <widget class="QLabel" name="label_3">
@@ -345,6 +345,19 @@
            <string>Optimize Trip</string>
           </property>
          </widget>
+         <widget class="QPushButton" name="pathPageBackButton">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>10</y>
+            <width>121</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Back</string>
+          </property>
+         </widget>
         </widget>
         <widget class="QWidget" name="tripPage">
          <widget class="QLabel" name="label_13">
@@ -352,7 +365,7 @@
            <rect>
             <x>460</x>
             <y>10</y>
-            <width>161</width>
+            <width>41</width>
             <height>17</height>
            </rect>
           </property>
@@ -465,7 +478,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
          <widget class="QListWidget" name="myOrderQuantityListWidget">
@@ -489,6 +502,151 @@
           </property>
           <property name="text">
            <string>Checkout</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_22">
+          <property name="geometry">
+           <rect>
+            <x>460</x>
+            <y>40</y>
+            <width>181</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Total Distance Traveleled: </string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="totalDistanceLabel">
+          <property name="geometry">
+           <rect>
+            <x>640</x>
+            <y>40</y>
+            <width>67</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_23">
+          <property name="geometry">
+           <rect>
+            <x>460</x>
+            <y>70</y>
+            <width>41</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Total:</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="totalLabel">
+          <property name="geometry">
+           <rect>
+            <x>520</x>
+            <y>70</y>
+            <width>67</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_26">
+          <property name="geometry">
+           <rect>
+            <x>700</x>
+            <y>460</y>
+            <width>211</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Locations Remaining: </string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="tripSizeLabel">
+          <property name="geometry">
+           <rect>
+            <x>880</x>
+            <y>460</y>
+            <width>67</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="summaryPage">
+         <widget class="QLabel" name="label_24">
+          <property name="geometry">
+           <rect>
+            <x>470</x>
+            <y>10</y>
+            <width>151</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Your Trip Has Ended!</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_25">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>70</y>
+            <width>141</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>You Have Traveled: </string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="summaryPageTotalDistance">
+          <property name="geometry">
+           <rect>
+            <x>310</x>
+            <y>70</y>
+            <width>67</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_27">
+          <property name="geometry">
+           <rect>
+            <x>170</x>
+            <y>120</y>
+            <width>121</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>You Have Spent:</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="summaryPageTotalSpent">
+          <property name="geometry">
+           <rect>
+            <x>320</x>
+            <y>120</y>
+            <width>67</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </widget>

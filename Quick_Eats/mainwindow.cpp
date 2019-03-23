@@ -4,7 +4,6 @@
 #include "QString"
 #include <QTextStream>
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -124,7 +123,6 @@ void MainWindow::readRestaurantFile(){
     file.close();
 }
 
-
 void MainWindow::on_mainLoginButton_clicked()
 {
     //changes the page on the stacked widget to the enter credentials page
@@ -237,14 +235,12 @@ void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetIte
         restaurantsVector[previous->listWidget()->row(previous)].menu[ui->manageMenuPriceListWidget->currentRow()].price = ui->manageMenuPriceListWidget->currentItem()->text().toFloat();
     }
 
-
     if(ui->manageRestaurantListWidget->isPersistentEditorOpen(previous))
     {
         //close any editors and update the vector with the new name of restaurant
         ui->manageRestaurantListWidget->closePersistentEditor(previous);
         restaurantsVector[previous->listWidget()->row(previous)].changeName(previous->text());
     }
-
 
     //update the menu list when a new restaurant is selected
     ui->manageMenuListWidget->clear();
@@ -383,6 +379,17 @@ void MainWindow::on_MWTakeTripButton_clicked()
 }
 
 
+void MainWindow::on_pathPageBackButton_clicked()
+{
+
+    ui->MWStackedWidget->setCurrentIndex(0);
+    ui->customSelectRestaurantListWidget->clear();
+    ui->customEditRestaurantListWidget->clear();
+}
+
+
+
+
 //if a restaurant is checked, it gets moved to the second list widget where the user
 //is able to drag the items around into their desired order
 
@@ -419,8 +426,6 @@ void MainWindow::on_customSelectRestaurantListWidget_itemChanged(QListWidgetItem
         ui->customEditRestaurantListWidget->takeItem(i);
     }
 }
-
-
 
 
 bool MainWindow::validIndex(int i)
@@ -497,7 +502,6 @@ void MainWindow::on_shortestPathButton_clicked()
     i = 0;
     j = 0;
 
-
     //perform the shortest distance algorithm, re-orders the list widget (or may need to return a queue and begin trip) 
     //aquire starting posistion
     QString startname = ui->customEditRestaurantListWidget->item(0)->text();
@@ -516,7 +520,6 @@ void MainWindow::on_shortestPathButton_clicked()
     }
     i = 0;
     found = false;
-
 
     //UN-nullify restaurants we want to visit
     int count;
@@ -541,7 +544,6 @@ void MainWindow::on_shortestPathButton_clicked()
         }
     }
 
-
     ui->customEditRestaurantListWidget->clear();
     //ui->customEditRestaurantListWidget->addItem(startname);
     //nullifiedIndexes[startingIndex] = -1;
@@ -549,8 +551,8 @@ void MainWindow::on_shortestPathButton_clicked()
     optimizePath(startingIndex, n);
 
     nullifiedIndexes.clear();
-
 }
+
 
 void MainWindow::on_customTakeTripButton_clicked()
 {
@@ -578,9 +580,6 @@ void MainWindow::on_customTakeTripButton_clicked()
         }
     }
 
-
-
-
     //change screen to the trip page
     ui->TakeTripStackedWidget->setCurrentIndex(1);
 
@@ -592,8 +591,10 @@ void MainWindow::on_customTakeTripButton_clicked()
 //IN THE RESTAURANT METHODS
 //*************************************************************
 
+//need to track distances in here
 void MainWindow::nextRestaurant()
 {
+
     if(currentTrip.getCurrentLocation().getName() == "Saddleback College")
     {
         //if were at saddleback, frontend looks quite different
@@ -612,6 +613,10 @@ void MainWindow::nextRestaurant()
         ui->currentLocationMenuItemListWidget->item(i)->setCheckState(Qt::Unchecked);
     }
     ui->subTotalLabel->setText(QString::number(0));
+    ui->tripSizeLabel->setText(QString::number(currentTrip.getTripSize()));
+
+
+
 }
 
 float MainWindow::getSubTotal()
@@ -638,7 +643,6 @@ float MainWindow::getSubTotal()
             }
         }
     }
-
     return sum;
 }
 
@@ -669,8 +673,6 @@ void MainWindow::on_currentLocationMenuItemListWidget_itemDoubleClicked(QListWid
         ui->myOrderItemListWidget->addItem(item->text());
         ui->myOrderQuantityListWidget->addItem(QString::number(1));
         item->setCheckState(Qt::Checked);
-
-
     }
     else
     {
@@ -696,7 +698,6 @@ void MainWindow::on_currentLocationMenuItemListWidget_itemChanged(QListWidgetIte
         if(item->text() == ui->myOrderItemListWidget->item(i)->text())
         {
             found = true;
-
         }
         else
         {
@@ -714,7 +715,6 @@ void MainWindow::on_currentLocationMenuItemListWidget_itemChanged(QListWidgetIte
         //ui->customEditRestaurantListWidget->item(ui->customEditRestaurantListWidget->count() - 1)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
 
         //QTextStream(stdout) <<  ui->customEditRestaurantListWidget->item(ui->customEditRestaurantListWidget->count() - 1)->text()  << ui->customEditRestaurantListWidget->dragDropMode() << endl;
-
     }
     else if (item->checkState() == 0) //if item is unchecked
     {
@@ -727,15 +727,39 @@ void MainWindow::on_currentLocationMenuItemListWidget_itemChanged(QListWidgetIte
 void MainWindow::on_checkOutButton_clicked()
 {
     //incremrent trip total
+    //get the distance between current and next restaurant
+    int previousRestaurantIndex = currentTrip.getCurrentLocation().getId();
 
     currentTrip.setTotalCost(currentTrip.getTotalCost() + ui->subTotalLabel->text().toFloat());
     //currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + //distance from current restaurant to next restaurant
-    currentTrip.removeLocation();
+    if(currentTrip.getTripSize() > 1)
+    {
+        currentTrip.removeLocation();
 
-    ui->currentLocationMenuItemListWidget->clear();
-    ui->currentLocationMenuPriceListWidget->clear();
-    ui->myOrderItemListWidget->clear();
-    ui->myOrderQuantityListWidget->clear();
 
-    nextRestaurant();
+
+        int nextRestaurantIndex = currentTrip.getCurrentLocation().getId();
+
+        currentTrip.setTotalDistance(currentTrip.getTotalDistanceTraveled() + restaurantsVector[previousRestaurantIndex].getDistance(nextRestaurantIndex));
+
+        ui->totalLabel->setText(QString::number(currentTrip.getTotalCost()));
+        ui->totalDistanceLabel->setText(QString::number(currentTrip.getTotalDistanceTraveled()));
+
+        ui->currentLocationMenuItemListWidget->clear();
+        ui->currentLocationMenuPriceListWidget->clear();
+        ui->myOrderItemListWidget->clear();
+        ui->myOrderQuantityListWidget->clear();
+
+        nextRestaurant();
+    }
+    else
+    {
+        //trip has ended, bring user to final screen
+        ui->summaryPageTotalSpent->setText(QString::number(currentTrip.getTotalCost()));
+        ui->summaryPageTotalDistance->setText(QString::number(currentTrip.getTotalDistanceTraveled()));
+        ui->TakeTripStackedWidget->setCurrentIndex(2);
+
+    }
 }
+
+
