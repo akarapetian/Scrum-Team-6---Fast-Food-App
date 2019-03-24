@@ -90,6 +90,7 @@ public:
 private:
     int id;          //Unique ID of restaurant
     QString name;     //name of restaurant
+    //QIcon icon;
 
     //THIS IS WHERE THE ERROR WAS (distance was declared to be size 10)
 

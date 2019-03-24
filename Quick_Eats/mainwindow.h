@@ -27,7 +27,7 @@ private slots:
 
     //void readRestaurantFile(QVector<restaurant>&);
     void writeRestaurantFile();
-    void readRestaurantFile();
+    void readRestaurantFile(QString filePath);
 
     //LOGIN FUNCTIONS
     void on_mainLoginButton_clicked();
@@ -46,7 +46,6 @@ private slots:
     void on_manageRestaurantListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
     void on_deleteRestaurantButton_clicked();
     void on_manageRestaurantListWidget_itemDoubleClicked(QListWidgetItem *item);
-    void on_addButton_clicked();
     void on_addRestaurantButton_clicked();
     void on_addItemButton_clicked();
     void on_manageMenuListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
@@ -78,20 +77,23 @@ private slots:
     bool validIndex(int i); //returns true if the index is alright to be operated on
 
     void on_currentLocationMenuItemListWidget_itemDoubleClicked(QListWidgetItem *item);
-
     void on_myOrderQuantityListWidget_itemDoubleClicked(QListWidgetItem *item);
-
     void on_currentLocationMenuItemListWidget_itemChanged(QListWidgetItem *item);
-
     void on_checkOutButton_clicked();
-
     void on_pathPageBackButton_clicked();
+
+    void on_manageRestaurantDistanceListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
     Ui::MainWindow *ui;
 
     //declare vector of restaurants
     QVector<restaurant> restaurantsVector;
+
+
+    QPixmap icons[13]; //stores restaurant icons
+
+    bool restaurantsAdded; //returns true if additional restaurants have been read in
 
     //queue that represents the trip the user is currently taking
     trip currentTrip;
