@@ -292,11 +292,20 @@
      <widget class="QLabel" name="ProgramNameLabel">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>140</y>
-        <width>81</width>
-        <height>17</height>
+        <x>510</x>
+        <y>180</y>
+        <width>221</width>
+        <height>61</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Oxygen Mono</family>
+        <pointsize>27</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="text">
        <string>Quick Eats</string>
@@ -305,11 +314,17 @@
      <widget class="QLabel" name="descriptionLabel">
       <property name="geometry">
        <rect>
-        <x>450</x>
-        <y>180</y>
-        <width>301</width>
+        <x>380</x>
+        <y>270</y>
+        <width>411</width>
         <height>17</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Oxygen Mono</family>
+        <pointsize>12</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Bringing you to your favorite food quickly.</string>
@@ -318,8 +333,8 @@
      <widget class="QStackedWidget" name="loginStackedWidget">
       <property name="geometry">
        <rect>
-        <x>410</x>
-        <y>220</y>
+        <x>400</x>
+        <y>310</y>
         <width>361</width>
         <height>121</height>
        </rect>
@@ -396,19 +411,26 @@
        </widget>
       </widget>
      </widget>
-     <widget class="QLabel" name="label_14">
+     <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>450</x>
-        <y>360</y>
-        <width>301</width>
-        <height>20</height>
+        <x>370</x>
+        <y>30</y>
+        <width>381</width>
+        <height>191</height>
        </rect>
       </property>
       <property name="text">
-       <string>temp username/password: foodie or MW</string>
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="resources.qrc">:/icons/logo/QElogosmall.png</pixmap>
       </property>
      </widget>
+     <zorder>label_9</zorder>
+     <zorder>ProgramNameLabel</zorder>
+     <zorder>descriptionLabel</zorder>
+     <zorder>loginStackedWidget</zorder>
     </widget>
     <widget class="QWidget" name="foodie">
      <widget class="QStackedWidget" name="FStackedWidget">
@@ -1436,6 +1458,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
