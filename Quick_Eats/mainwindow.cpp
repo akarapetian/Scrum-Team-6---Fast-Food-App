@@ -65,26 +65,20 @@ MainWindow::MainWindow(QWidget *parent) :
     icons[10] = QPixmap (":/icons/icons/sports-papa-johns-menu-png-logo-4.png");
     icons[11] = QPixmap (":/icons/icons/pizzahut.png");
     icons[12] = QPixmap (":/icons/icons/sonic.png");
-/*
-    //update the list view in the manage restaurants page
+
+    int j = 0;
     for(int i = 0; i < restaurantsVector.size(); i++)
     {
-        ui->manageRestaurantListWidget->addItem(restaurantsVector[i].getName());
+        if(validDeletedIndex(i))
+        {
+            ui->manageRestaurantListWidget->addItem(new QListWidgetItem(QIcon(icons[i]), restaurantsVector[i].getName()));   //icons[i]), restaurantsVector[i].getName()));
+            ui->manageRestaurantListWidget->item(j)->setSizeHint(QSize(-1, 26));
 
+            ui->manageRestaurantDistanceListWidget->addItem(QString::number(restaurantsVector[0].getDistance(i)));
+            ui->manageRestaurantDistanceListWidget->item(j)->setSizeHint(QSize(-1, 26));
+            ++j;
+        }
     }
-
-*/
-
-    for(int i = 0; i <restaurantsVector.size(); i++)
-    {
-        ui->manageRestaurantListWidget->addItem(new QListWidgetItem(QIcon(icons[i]), restaurantsVector[i].getName()));   //icons[i]), restaurantsVector[i].getName()));
-        ui->manageRestaurantListWidget->item(i)->setSizeHint(QSize(-1, 26));
-
-        ui->manageRestaurantDistanceListWidget->addItem(QString::number(restaurantsVector[0].getDistance(i)));
-        ui->manageRestaurantDistanceListWidget->item(i)->setSizeHint(QSize(-1, 26));
-    }
-
-
 }
 
 MainWindow::~MainWindow()
@@ -102,6 +96,16 @@ void MainWindow::writeRestaurantFile(){
     else {
 
         QTextStream out(&file);
+
+        out << deletedIndexes.size() << endl;
+
+        if(deletedIndexes.size() > 0)
+        {
+            for(int i = 0; i < deletedIndexes.size(); i++)
+            {
+                out << deletedIndexes[i] << endl;
+            }
+        }
 
         out << restaurantsVector[0].distance.size() << endl; //the way we have the file reading set up is built in a way such that it reads the size of how many distances per restaurant there are first since that is an independent variable from the rest of the rest. class, so im just taking the distance size of the first element since they are all the same size and placing it
         for(int i = 0; i < restaurantsVector.size(); i++){
@@ -121,6 +125,7 @@ void MainWindow::writeRestaurantFile(){
 }
 
 void MainWindow::readRestaurantFile(QString filePath){
+
     restaurantsVector.clear();
 
     QFile file(filePath);
@@ -136,10 +141,22 @@ void MainWindow::readRestaurantFile(QString filePath){
     int newDistanceSize;
     QVector<float> tempDistance;
 
+    int numDeleted;
+
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         QMessageBox::information(nullptr, "error", file.errorString());
     }
     else{
+        //read in nullified restaurants
+        line = in.readLine();
+        numDeleted = line.toInt();
+
+        for(int i = 0; i < numDeleted; i++)
+        {
+            line = in.readLine();
+            deletedIndexes.push_back(line.toInt());
+        }
+
         line = in.readLine();
         newDistanceSize = line.toInt();
 
@@ -305,11 +322,31 @@ void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetIte
     ui->manageMenuListWidget->clear();
     ui->manageMenuPriceListWidget->clear();
 
-    for(int i = 0; i < restaurantsVector[ui->manageRestaurantListWidget->currentRow()].getMenuSize(); i++){
-        ui->manageMenuListWidget->addItem(restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[i].itemName);
+
+
+    //perform search for the item to be removed
+    int k = 0;
+    bool found = false;
+
+    while(!found && k < restaurantsVector.size())
+    {
+        if(ui->manageRestaurantListWidget->currentItem()->text() == restaurantsVector[k].getName())
+        {
+            //QTextStream(stdout) << ui->manageRestaurantListWidget->currentItem()->text() << endl;
+            found = true;
+        }
+        else
+        {
+            ++k;
+        }
+    }
+
+    //this is wrong
+    for(int i = 0; i < restaurantsVector[k].getMenuSize(); i++){
+        ui->manageMenuListWidget->addItem(restaurantsVector[k].menu[i].itemName);
         ui->manageMenuListWidget->item(i)->setSizeHint(QSize(-1, 26));
 
-        ui->manageMenuPriceListWidget->addItem(QString::number(restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[i].price));
+        ui->manageMenuPriceListWidget->addItem(QString::number(restaurantsVector[k].menu[i].price));
         ui->manageMenuPriceListWidget->item(i)->setSizeHint(QSize(-1, 26));
     }
 }
@@ -324,10 +361,47 @@ void MainWindow::on_deleteRestaurantButton_clicked()
     //program currently crashing if all items are removed from list
     if(ui->manageRestaurantListWidget->currentItem() != nullptr)
     {
+        //perform search for the item to be removed
+        int i = 0;
+        bool found = false;
+
+        while(!found && i < restaurantsVector.size())
+        {
+            if(ui->manageRestaurantListWidget->currentItem()->text() == restaurantsVector[i].getName())
+            {
+                QTextStream(stdout) << ui->manageRestaurantListWidget->currentItem()->text() << endl;
+                found = true;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        deletedIndexes.push_back(i);
+
         int index = ui->manageRestaurantListWidget->currentRow();
         ui->manageRestaurantListWidget->takeItem(index);
-        restaurantsVector.remove(index);
+        ui->manageRestaurantDistanceListWidget->takeItem(index);
     }
+}
+
+bool MainWindow::validDeletedIndex(int i)
+{
+    bool valid = true;
+
+    if(deletedIndexes.size() > 0)
+    {
+        //if i exists in a list of nullified indexes, valid = false;
+       for(int count = 0; count < deletedIndexes.size(); count++)
+       {
+           if(i == deletedIndexes[count])
+           {
+               valid = false;
+           }
+       }
+    }
+
+    return valid;
 }
 
 void MainWindow::on_addRestaurantButton_clicked()
@@ -338,16 +412,26 @@ void MainWindow::on_addRestaurantButton_clicked()
         readRestaurantFile("/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data2.txt");
         //update the list view in the manage restaurants page
         ui->manageRestaurantListWidget->clear();
+        ui->manageRestaurantDistanceListWidget->clear();
         ui->manageMenuListWidget->clear();
         ui->manageMenuPriceListWidget->clear();
 
-        for(int i = 0; i < restaurantsVector.size(); i++)
-        ui->manageRestaurantListWidget->addItem(restaurantsVector[i].getName());
+        int j = 0;
+        for(int i = 0; i    < restaurantsVector.size(); i++)
+        {
+            if(validDeletedIndex(i))
+            {
+                ui->manageRestaurantListWidget->addItem(new QListWidgetItem(QIcon(icons[i]), restaurantsVector[i].getName()));   //icons[i]), restaurantsVector[i].getName()));
+                ui->manageRestaurantListWidget->item(j)->setSizeHint(QSize(-1, 26));
 
+                ui->manageRestaurantDistanceListWidget->addItem(QString::number(restaurantsVector[0].getDistance(i)));
+                ui->manageRestaurantDistanceListWidget->item(j)->setSizeHint(QSize(-1, 26));
+                ++j;
+            }
+        }
         restaurantsAdded = true;
     }
 }
-
 
 void MainWindow::on_manageMenuListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
@@ -355,13 +439,11 @@ void MainWindow::on_manageMenuListWidget_itemDoubleClicked(QListWidgetItem *item
     ui->manageMenuListWidget->openPersistentEditor(item);
 }
 
-
 void MainWindow::on_manageMenuPriceListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     //allow editing of the item price if double clicked
     ui->manageMenuPriceListWidget->openPersistentEditor(item);
 }
-
 
 //**** 2 FOLLOWING FUNCTION ARE WIP
 //closes the editor if the selected item is changed in the menu list
@@ -430,13 +512,20 @@ void MainWindow::on_deleteItemButton_clicked()
 
 void MainWindow::on_MWTakeTripButton_clicked()
 {
+    int j = 0;
     //update the list view in the manage restaurants page
     for(int i = 0; i < restaurantsVector.size(); i++)
     {
-        ui->customSelectRestaurantListWidget->addItem(restaurantsVector[i].getName());
 
-        ui->customSelectRestaurantListWidget->item(i)->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        ui->customSelectRestaurantListWidget->item(i)->setCheckState(Qt::Unchecked);
+        if(validDeletedIndex(i))
+        {
+            ui->customSelectRestaurantListWidget->addItem(restaurantsVector[i].getName());
+
+            ui->customSelectRestaurantListWidget->item(j)->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+            ui->customSelectRestaurantListWidget->item(j)->setCheckState(Qt::Unchecked);
+            ++j;
+        }
+
     }
 
     ui->MWStackedWidget->setCurrentIndex(1);
@@ -497,14 +586,18 @@ bool MainWindow::validIndex(int i)
 {
     bool valid = true;
 
-    //if i exists in a list of nullified indexes, valid = false;
-   for(int count = 0; count < nullifiedIndexes.size(); count++)
-   {
-       if(i == nullifiedIndexes[count])
+    if(nullifiedIndexes.size() > 0)
+    {
+        //if i exists in a list of nullified indexes, valid = false;
+       for(int count = 0; count < nullifiedIndexes.size(); count++)
        {
-           valid = false;
+           if(i == nullifiedIndexes[count])
+           {
+               valid = false;
+           }
        }
-   }
+    }
+
     return valid;
 }
 
@@ -538,118 +631,121 @@ void MainWindow::optimizePath(int j, int n)
 //SHORTEST PATH ALGORITHM GOES HERE
 void MainWindow::on_shortestPathButton_clicked()
 {    
-    //this attempt will try to add all ditances to a matrix, in the findshortestdistance function we will perform a check before returning
-    //number of restaurants to be optimized
-    int n = ui->customEditRestaurantListWidget->count();
-    int k = restaurantsVector[0].getDistanceSize();
-
-    bool found = false;
-
-    int i = 0; //incrementer for iterating through EVERY element in the restaurant list widget
-    int j = 0; //incrementer for iterating through restaurant vector until it matches
-
-    //resize each row to be the right length
-    distanceMatrix.resize(k);
-
-    //first step is to load the restaurant distances into a 2D vector of distances
-    for(i = 0; i < k; i++)
+    if(ui->customEditRestaurantListWidget->count() > 1)
     {
-        //fill up nullified indexes with all indexes, used later in code
-        nullifiedIndexes.push_back(i);
+        //this attempt will try to add all ditances to a matrix, in the findshortestdistance function we will perform a check before returning
+        //number of restaurants to be optimized
+        int n = ui->customEditRestaurantListWidget->count();
+        int k = restaurantsVector[0].getDistanceSize();
 
-        //resize each column to be the right height
-        distanceMatrix[i].resize(k);
-        for(j = 0; j < k; j++)
-        {
-            distanceMatrix[i][j] = restaurantsVector[i].getDistance(j);
-        }
-    }
-    i = 0;
-    j = 0;
+        bool found = false;
 
-    //perform the shortest distance algorithm, re-orders the list widget (or may need to return a queue and begin trip) 
-    //aquire starting posistion
-    QString startname = ui->customEditRestaurantListWidget->item(0)->text();
-    int startingIndex = 0;
-    while(!found && i < restaurantsVector.size())
-    {
-        if(ui->customEditRestaurantListWidget->item(0)->text() == restaurantsVector[i].getName())
-        {
-            startingIndex = restaurantsVector[i].getId();
-            found = true;
-        }
-        else
-        {
-            ++i;
-        }
-    }
-    i = 0;
-    found = false;
+        int i = 0; //incrementer for iterating through EVERY element in the restaurant list widget
+        int j = 0; //incrementer for iterating through restaurant vector until it matches
 
-    //UN-nullify restaurants we want to visit
-    int count;
-    for(i = 0; i < n; i++)
-    {
-        //find index of the item in the list widget, and pop that from nullifiedlocations vector
-        count = 0;
-        found = false;
-        //must perform search to add the correct restaurants to the queue
-        while(!found && count < restaurantsVector.size())
+        //resize each row to be the right length
+        distanceMatrix.resize(k);
+
+        //first step is to load the restaurant distances into a 2D vector of distances
+        for(i = 0; i < k; i++)
         {
-            if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
+            //fill up nullified indexes with all indexes, used later in code
+            nullifiedIndexes.push_back(i);
+
+            //resize each column to be the right height
+            distanceMatrix[i].resize(k);
+            for(j = 0; j < k; j++)
             {
-                //when the names match, remove the index from the nullifiedlocations vector
-                nullifiedIndexes[count] = -1;
+                distanceMatrix[i][j] = restaurantsVector[i].getDistance(j);
+            }
+        }
+        i = 0;
+        j = 0;
+
+        //perform the shortest distance algorithm, re-orders the list widget (or may need to return a queue and begin trip)
+        //aquire starting posistion
+        QString startname = ui->customEditRestaurantListWidget->item(0)->text();
+        int startingIndex = 0;
+        while(!found && i < restaurantsVector.size())
+        {
+            if(ui->customEditRestaurantListWidget->item(0)->text() == restaurantsVector[i].getName())
+            {
+                startingIndex = restaurantsVector[i].getId();
                 found = true;
             }
             else
             {
-                ++count;
+                ++i;
             }
         }
+        i = 0;
+        found = false;
+
+        //UN-nullify restaurants we want to visit
+        int count;
+        for(i = 0; i < n; i++)
+        {
+            //find index of the item in the list widget, and pop that from nullifiedlocations vector
+            count = 0;
+            found = false;
+            //must perform search to add the correct restaurants to the queue
+            while(!found && count < restaurantsVector.size())
+            {
+                if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
+                {
+                    //when the names match, remove the index from the nullifiedlocations vector
+                    nullifiedIndexes[count] = -1;
+                    found = true;
+                }
+                else
+                {
+                    ++count;
+                }
+            }
+        }
+
+        ui->customEditRestaurantListWidget->clear();
+
+        optimizePath(startingIndex, n);
+
+        nullifiedIndexes.clear();
     }
-
-    ui->customEditRestaurantListWidget->clear();
-    //ui->customEditRestaurantListWidget->addItem(startname);
-    //nullifiedIndexes[startingIndex] = -1;
-
-    optimizePath(startingIndex, n);
-
-    nullifiedIndexes.clear();
 }
 
 
 void MainWindow::on_customTakeTripButton_clicked()
 {
-    //fill up the currentrip queue with the items in the user-ordered restaurant list
-    int count;
-    bool found = false;
-
-    for(int i = 0; i < ui->customEditRestaurantListWidget->count(); i++)
+    if(ui->customEditRestaurantListWidget->count() > 0)
     {
-        count = 0;
-        found = false;
-        //must perform search to add the correct restaurants to the queue
-        while(!found && count < restaurantsVector.size())
+        //fill up the currentrip queue with the items in the user-ordered restaurant list
+        int count;
+        bool found = false;
+
+        for(int i = 0; i < ui->customEditRestaurantListWidget->count(); i++)
         {
-            if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
+            count = 0;
+            found = false;
+            //must perform search to add the correct restaurants to the queue
+            while(!found && count < restaurantsVector.size())
             {
-                //when the names match, add the restaurant to the current trip
-                currentTrip.addLocation(restaurantsVector[count]);
-                found = true;
-            }
-            else
-            {
-                ++count;
+                if(ui->customEditRestaurantListWidget->item(i)->text() == restaurantsVector[count].getName())
+                {
+                    //when the names match, add the restaurant to the current trip
+                    currentTrip.addLocation(restaurantsVector[count]);
+                    found = true;
+                }
+                else
+                {
+                    ++count;
+                }
             }
         }
+
+        //change screen to the trip page
+        ui->TakeTripStackedWidget->setCurrentIndex(1);
+
+        nextRestaurant();
     }
-
-    //change screen to the trip page
-    ui->TakeTripStackedWidget->setCurrentIndex(1);
-
-    nextRestaurant();
-
 }
 
 //*************************************************************

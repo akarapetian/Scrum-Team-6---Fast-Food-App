@@ -45,6 +45,7 @@ private slots:
     void on_MWManageBackButton_clicked();
     void on_manageRestaurantListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
     void on_deleteRestaurantButton_clicked();
+    bool validDeletedIndex(int i); //returns true if the index is NOT deleted
     void on_manageRestaurantListWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_addRestaurantButton_clicked();
     void on_addItemButton_clicked();
@@ -117,6 +118,8 @@ private:
     //array of restaurant id's that are no longer of use to the algorithm
     QVector<int> nullifiedIndexes;
     //these elements may have already been visted, or were not added to the list at all
+
+    QVector<int> deletedIndexes;
 
 
 };
