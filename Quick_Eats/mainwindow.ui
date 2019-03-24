@@ -255,7 +255,11 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Quick Eats</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/icons/logo/QElogosmall.png</normaloff>:/icons/logo/QElogosmall.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QStackedWidget" name="primaryPageStackedWidget">
