@@ -286,7 +286,7 @@
      </size>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="welcomePage">
      <widget class="QLabel" name="ProgramNameLabel">
@@ -500,7 +500,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="MWWelcomePage">
        <widget class="QPushButton" name="MWTakeTripButton">
@@ -585,7 +585,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="customPathPage">
          <widget class="QLabel" name="label_3">
@@ -1097,7 +1097,7 @@
        <widget class="QLabel" name="label_6">
         <property name="geometry">
          <rect>
-          <x>240</x>
+          <x>120</x>
           <y>70</y>
           <width>141</width>
           <height>17</height>
@@ -1123,8 +1123,8 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>500</x>
-          <y>340</y>
+          <x>110</x>
+          <y>470</y>
           <width>257</width>
           <height>41</height>
          </rect>
@@ -1151,8 +1151,8 @@
          <rect>
           <x>40</x>
           <y>100</y>
-          <width>711</width>
-          <height>221</height>
+          <width>371</width>
+          <height>351</height>
          </rect>
         </property>
        </widget>
@@ -1178,70 +1178,6 @@
         <property name="text">
          <string>Back</string>
         </property>
-       </widget>
-       <widget class="QStackedWidget" name="addRestaurantStackedWidget">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>340</y>
-          <width>421</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="hiddenPage"/>
-        <widget class="QWidget" name="editPage">
-         <widget class="QLabel" name="label_8">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>10</y>
-            <width>121</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>New Restaurant:</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="addButton">
-          <property name="geometry">
-           <rect>
-            <x>310</x>
-            <y>150</y>
-            <width>89</width>
-            <height>25</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>add</string>
-          </property>
-         </widget>
-         <widget class="QWidget" name="layoutWidget">
-          <property name="geometry">
-           <rect>
-            <x>30</x>
-            <y>50</y>
-            <width>192</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QLabel" name="label_9">
-             <property name="text">
-              <string>name:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="newRestaurantNameLineEdit"/>
-           </item>
-          </layout>
-         </widget>
-        </widget>
        </widget>
        <widget class="QListWidget" name="manageMenuPriceListWidget">
         <property name="geometry">
@@ -1347,6 +1283,35 @@
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QListWidget" name="manageRestaurantDistanceListWidget">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>100</y>
+          <width>91</width>
+          <height>351</height>
+         </rect>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>390</x>
+          <y>70</y>
+          <width>121</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>distance from SB</string>
+        </property>
        </widget>
       </widget>
      </widget>

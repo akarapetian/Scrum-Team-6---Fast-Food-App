@@ -10,14 +10,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    readRestaurantFile();
+    restaurantsAdded  = false;
+
+    readRestaurantFile("/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
 
     //initialize all the pages to the first page
     ui->primaryPageStackedWidget->setCurrentIndex(0);
     ui->loginStackedWidget->setCurrentIndex(0);
     ui->MWStackedWidget->setCurrentIndex(0);
     ui->FStackedWidget->setCurrentIndex(0);
-    ui->addRestaurantStackedWidget->setCurrentIndex(0);
     ui->addMenuItemStackedWidget->setCurrentIndex(0);
 
     ui->TakeTripStackedWidget->setCurrentIndex(0);
@@ -50,22 +51,79 @@ MainWindow::MainWindow(QWidget *parent) :
 //        ui->myTripsListWidget->addItem(myTrips[i].getName());
 
 
+
+    icons[0]  = QPixmap(":/icons/icons/721px-Saddleback_College_logo.png");
+    icons[1]  = QPixmap (":/icons/icons/Logo-Mcdonalds-2016.png");
+    icons[2]  = QPixmap (":/icons/icons/chipotle-mexican-grill-logo-png-transparent.png");
+    icons[3]  = QPixmap (":/icons/icons/5842999aa6515b1e0ad75ae1.png");
+    icons[4]  = QPixmap (":/icons/icons/kfc-png-kfc-logo-png-1-year-ago-1024.png");
+    icons[5]  = QPixmap (":/icons/icons/for-subway-symbol-png-logo-1.png");
+    icons[6]  = QPixmap (":/icons/icons/InNOut.svg.png");
+    icons[7]  = QPixmap (":/icons/icons/wendys-logo-png--2268.png");
+    icons[8]  = QPixmap (":/icons/icons/122-1223923_jack-in-the-box-logo-png.png");
+    icons[9]  = QPixmap (":/icons/icons/Elpolloloco-logo.png");
+    icons[10] = QPixmap (":/icons/icons/sports-papa-johns-menu-png-logo-4.png");
+    icons[11] = QPixmap (":/icons/icons/pizzahut.png");
+    icons[12] = QPixmap (":/icons/icons/sonic.png");
+/*
     //update the list view in the manage restaurants page
     for(int i = 0; i < restaurantsVector.size(); i++)
-    ui->manageRestaurantListWidget->addItem(restaurantsVector[i].getName());
+    {
+        ui->manageRestaurantListWidget->addItem(restaurantsVector[i].getName());
 
+    }
+
+*/
+
+    for(int i = 0; i <restaurantsVector.size(); i++)
+    {
+        ui->manageRestaurantListWidget->addItem(new QListWidgetItem(QIcon(icons[i]), restaurantsVector[i].getName()));   //icons[i]), restaurantsVector[i].getName()));
+        ui->manageRestaurantListWidget->item(i)->setSizeHint(QSize(-1, 26));
+
+        ui->manageRestaurantDistanceListWidget->addItem(QString::number(restaurantsVector[0].getDistance(i)));
+        ui->manageRestaurantDistanceListWidget->item(i)->setSizeHint(QSize(-1, 26));
+    }
 
 
 }
 
 MainWindow::~MainWindow()
 {
+    writeRestaurantFile();
     delete ui;
 }
 
-void MainWindow::readRestaurantFile(){
-
+void MainWindow::writeRestaurantFile(){
     QFile file("/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data.txt");
+
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QMessageBox::information(nullptr, "error", file.errorString());
+    }
+    else {
+
+        QTextStream out(&file);
+
+        out << restaurantsVector[0].distance.size() << endl; //the way we have the file reading set up is built in a way such that it reads the size of how many distances per restaurant there are first since that is an independent variable from the rest of the rest. class, so im just taking the distance size of the first element since they are all the same size and placing it
+        for(int i = 0; i < restaurantsVector.size(); i++){
+            out << restaurantsVector[i].getName() << endl;
+            out << restaurantsVector[i].getId() << endl;
+            for(int j = 0; j < restaurantsVector[0].getDistanceSize(); j++){
+                out << restaurantsVector[i].distance[j] << endl;
+            }
+            out << restaurantsVector[i].menu.size() << endl;
+            for(int j = 0; j < restaurantsVector[i].menu.size(); j++){
+                out << restaurantsVector[i].menu[j].itemName << endl;
+                out << restaurantsVector[i].menu[j].price << endl;
+            }
+            out << endl;
+        }
+    }
+}
+
+void MainWindow::readRestaurantFile(QString filePath){
+    restaurantsVector.clear();
+
+    QFile file(filePath);
 
     QString tempRest;
     QVector<item> tempMenu;
@@ -219,6 +277,7 @@ void MainWindow::on_manageRestaurantListWidget_itemDoubleClicked(QListWidgetItem
 
 void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+    ui->manageRestaurantDistanceListWidget->setCurrentRow(current->listWidget()->currentRow());
     //solve bug where program is crashign when changing row on restaurant list widget
     //close persistent editor and update vector with whatever is edited
     if(ui->manageMenuListWidget->isPersistentEditorOpen(ui->manageMenuListWidget->currentItem()))
@@ -248,9 +307,16 @@ void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetIte
 
     for(int i = 0; i < restaurantsVector[ui->manageRestaurantListWidget->currentRow()].getMenuSize(); i++){
         ui->manageMenuListWidget->addItem(restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[i].itemName);
-        ui->manageMenuPriceListWidget->addItem(QString::number(restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[i].price));
-    }
+        ui->manageMenuListWidget->item(i)->setSizeHint(QSize(-1, 26));
 
+        ui->manageMenuPriceListWidget->addItem(QString::number(restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[i].price));
+        ui->manageMenuPriceListWidget->item(i)->setSizeHint(QSize(-1, 26));
+    }
+}
+
+void MainWindow::on_manageRestaurantDistanceListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    ui->manageRestaurantListWidget->setCurrentRow(current->listWidget()->currentRow());
 }
 
 void MainWindow::on_deleteRestaurantButton_clicked()
@@ -266,23 +332,22 @@ void MainWindow::on_deleteRestaurantButton_clicked()
 
 void MainWindow::on_addRestaurantButton_clicked()
 {
-    ui->addRestaurantStackedWidget->setCurrentIndex(1);
+    if(restaurantsAdded == false)
+    {
+        //parse second data.txt file and add new restaurants to vector
+        readRestaurantFile("/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data2.txt");
+        //update the list view in the manage restaurants page
+        ui->manageRestaurantListWidget->clear();
+        ui->manageMenuListWidget->clear();
+        ui->manageMenuPriceListWidget->clear();
+
+        for(int i = 0; i < restaurantsVector.size(); i++)
+        ui->manageRestaurantListWidget->addItem(restaurantsVector[i].getName());
+
+        restaurantsAdded = true;
+    }
 }
 
-//need to go back and make this function parse the second text file
-void MainWindow::on_addButton_clicked()
-{
-    /*
-    if(ui->newRestaurantNameLineEdit->text() != "")
-    {
-        QVector<item> newMenu;
-        restaurantsVector.push_back(restaurant(restaurantsVector.size(), ui->newRestaurantNameLineEdit->text(), 0, nullptr, newMenu));
-        ui->manageRestaurantListWidget->addItem(restaurantsVector[restaurantsVector.size() - 1].getName());
-    }
-    ui->newRestaurantNameLineEdit->clear();
-    ui->addRestaurantStackedWidget->setCurrentIndex(0);
-    */
-}
 
 void MainWindow::on_manageMenuListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
@@ -305,7 +370,7 @@ void MainWindow::on_manageMenuListWidget_currentItemChanged(QListWidgetItem *cur
     if(ui->manageMenuListWidget->isPersistentEditorOpen(previous))
     {
         ui->manageMenuListWidget->closePersistentEditor(previous);
-        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[ui->manageMenuListWidget->currentRow()].itemName = previous->text();
+        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[previous->listWidget()->row(previous)].itemName = previous->text();
     }
 }
 
@@ -315,7 +380,7 @@ void MainWindow::on_manageMenuPriceListWidget_currentItemChanged(QListWidgetItem
     if(ui->manageMenuPriceListWidget->isPersistentEditorOpen(previous))
     {
         ui->manageMenuPriceListWidget->closePersistentEditor(previous);
-        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[ui->manageMenuPriceListWidget->currentRow()].price = previous->text().toFloat();
+        restaurantsVector[ui->manageRestaurantListWidget->currentRow()].menu[previous->listWidget()->row(previous)].price = previous->text().toFloat();
     }
 }
 
@@ -759,5 +824,7 @@ void MainWindow::on_checkOutButton_clicked()
 
     }
 }
+
+
 
 
