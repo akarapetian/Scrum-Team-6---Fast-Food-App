@@ -18,7 +18,7 @@ This repository has 5 primary branches. One for each team member and a master br
 
 # To Do
 - Link foodie to MW methods
-- add logos to application and to each restaurant
+- ~~add logos to application and to each restaurant~~
 - ~~display distances from saddleback~~
 - display all restaurants and menu items (for foodie)
 - ~~separate first ten restaurants from last two~~
@@ -48,6 +48,5 @@ This repository has 5 primary branches. One for each team member and a master br
   - big o analysis
 
 # Bugs
-- program is crashing after running shortest path algorithm in debug mode
 - Need to add error checking to persistent editing features
 - Editing menu prices is quite buggy, not updating the restaurant selection on the pathing page properly
