@@ -26,7 +26,7 @@ This repository has 5 primary branches. One for each team member and a master br
 - plan a trip starting at saddleback, and then visit the closest fast food restaurant
 - present a grand reciept at the end of each trip
 - encrypt mw password
-- address invalid inputs
+- ~~address invalid inputs~~
 ------------------------------------
 - submit agile stories
 - submite uml class diagrams, three use cases, and three state diagrams
