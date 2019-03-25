@@ -21,10 +21,10 @@ This repository has 5 primary branches. One for each team member and a master br
 - Link foodie to MW methods
 - ~~add logos to application and to each restaurant~~
 - ~~display distances from saddleback~~
-- display all restaurants and menu items (for foodie)
+- ~~display all restaurants and menu items (for foodie)~~
 - ~~separate first ten restaurants from last two~~
 
-- plan a trip starting at saddleback, and then visit the closest fast food restaurant
+- ~~plan a trip starting at saddleback, and then visit the closest fast food restaurant~~
 - ~~present a grand reciept at the end of each trip~~
 - encrypt mw password
 - ~~address invalid inputs~~
