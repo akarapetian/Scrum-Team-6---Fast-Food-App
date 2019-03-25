@@ -99,6 +99,7 @@ private:
     QVector<restaurant> restaurantsVector;
 
     QPixmap icons[13]; //stores restaurant icons
+    QPixmap bigIcons[13]; //stores big icons
 
     bool restaurantsAdded; //returns true if additional restaurants have been read in
 

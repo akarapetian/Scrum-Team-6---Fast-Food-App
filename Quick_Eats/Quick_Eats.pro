@@ -33,8 +33,10 @@ HEADERS += \
     restaurant.h \
     trip.h \
 
-    reciept.h \
-    doublehash.h
+    doublehash.h \
+    reciept.h
+
+
 
 
 FORMS += \
