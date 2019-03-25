@@ -831,7 +831,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="MWWelcomePage">
        <widget class="QPushButton" name="MWTakeTripButton">
@@ -943,7 +943,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="customPathPage">
          <widget class="QLabel" name="label_3">
@@ -1532,25 +1532,38 @@
            <string>Dollars</string>
           </property>
          </widget>
+         <widget class="QLabel" name="label_36">
+          <property name="geometry">
+           <rect>
+            <x>1110</x>
+            <y>150</y>
+            <width>67</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Oxygen Mono</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Reciept</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_44">
+          <property name="geometry">
+           <rect>
+            <x>1110</x>
+            <y>180</y>
+            <width>67</width>
+            <height>17</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>&lt;---</string>
+          </property>
+         </widget>
         </widget>
-       </widget>
-       <widget class="QLabel" name="label_36">
-        <property name="geometry">
-         <rect>
-          <x>840</x>
-          <y>0</y>
-          <width>67</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Oxygen Mono</family>
-         </font>
-        </property>
-        <property name="text">
-         <string>Reciept</string>
-        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="MWManageRestaurantsPage">

@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     icons[11] = QPixmap (":/icons/icons/pizzahut.png");
     icons[12] = QPixmap (":/icons/icons/sonic.png");
 
-
+/*
     int j = 0;
     for(int i = 0; i < restaurantsVector.size(); i++)
     {
@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ++j;
         }
     }
+    */
 }
 
 MainWindow::~MainWindow()
@@ -218,6 +219,23 @@ void MainWindow::on_actionLogout_triggered()
     ui->MWStackedWidget->setCurrentIndex(0);
     ui->FStackedWidget->setCurrentIndex(0);
 
+    ui->foodieMenuPriceListWidget->blockSignals(true);
+    ui->foodieMenuListWidget->blockSignals(true);
+    ui->foodieRestaurantListWidget->blockSignals(true);
+    ui->manageMenuListWidget->blockSignals(true);
+    ui->manageMenuPriceListWidget->blockSignals(true);
+    ui->manageRestaurantListWidget->blockSignals(true);
+    ui->manageRestaurantDistanceListWidget->blockSignals(true);
+    ui->currentLocationMenuItemListWidget->blockSignals(true);
+    ui->currentLocationMenuPriceListWidget->blockSignals(true);
+    ui->customEditRestaurantListWidget->blockSignals(true);
+    ui->customSelectRestaurantListWidget->blockSignals(true);
+    ui->currentLocationMenuItemListWidget->blockSignals(true);
+    ui->currentLocationMenuPriceListWidget->blockSignals(true);
+    ui->recieptListWidget->blockSignals(true);
+    ui->recieptPricelistWidget->blockSignals(true);
+    ui->recieptQuantityListWidget->blockSignals(true);
+
     ui->foodieMenuPriceListWidget->clear();
     ui->foodieMenuListWidget->clear();
     ui->foodieRestaurantListWidget->clear();
@@ -234,6 +252,23 @@ void MainWindow::on_actionLogout_triggered()
     ui->recieptListWidget->clear();
     ui->recieptPricelistWidget->clear();
     ui->recieptQuantityListWidget->clear();
+
+    ui->foodieMenuPriceListWidget->blockSignals(false);
+    ui->foodieMenuListWidget->blockSignals(false);
+    ui->foodieRestaurantListWidget->blockSignals(false);
+    ui->manageMenuListWidget->blockSignals(false);
+    ui->manageMenuPriceListWidget->blockSignals(false);
+    ui->manageRestaurantListWidget->blockSignals(false);
+    ui->manageRestaurantDistanceListWidget->blockSignals(false);
+    ui->currentLocationMenuItemListWidget->blockSignals(false);
+    ui->currentLocationMenuPriceListWidget->blockSignals(false);
+    ui->customEditRestaurantListWidget->blockSignals(false);
+    ui->customSelectRestaurantListWidget->blockSignals(false);
+    ui->currentLocationMenuItemListWidget->blockSignals(false);
+    ui->currentLocationMenuPriceListWidget->blockSignals(false);
+    ui->recieptListWidget->blockSignals(false);
+    ui->recieptPricelistWidget->blockSignals(false);
+    ui->recieptQuantityListWidget->blockSignals(false);
 }
 
 //************************************************************************
@@ -283,6 +318,19 @@ void MainWindow::on_MWManageRestaurantsButton_clicked()
 {
     //go to manage restaurants page
     ui->MWStackedWidget->setCurrentIndex(2);
+    int j = 0;
+    for(int i = 0; i < restaurantsVector.size(); i++)
+    {
+        if(validDeletedIndex(i))
+        {
+            ui->manageRestaurantListWidget->addItem(new QListWidgetItem(QIcon(icons[i]), restaurantsVector[i].getName()));   //icons[i]), restaurantsVector[i].getName()));
+            ui->manageRestaurantListWidget->item(j)->setSizeHint(QSize(-1, 26));
+
+            ui->manageRestaurantDistanceListWidget->addItem(QString::number(restaurantsVector[0].getDistance(i)));
+            ui->manageRestaurantDistanceListWidget->item(j)->setSizeHint(QSize(-1, 26));
+            ++j;
+        }
+    }
 }
 
 void MainWindow::on_MWManageBackButton_clicked()
