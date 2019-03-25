@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/Logo-Mcdonalds-2016.png</file>
+        <file>icons/721px-Saddleback_College_logo.png</file>
+        <file>icons/chipotle-mexican-grill-logo-png-transparent.png</file>
+        <file>icons/Elpolloloco-logo.png</file>
+        <file>icons/for-subway-symbol-png-logo-1.png</file>
+        <file>icons/InNOut.svg.png</file>
+        <file>icons/122-1223923_jack-in-the-box-logo-png.png</file>
+        <file>icons/kfc-png-kfc-logo-png-1-year-ago-1024.png</file>
+        <file>icons/5842999aa6515b1e0ad75ae1.png</file>
+        <file>icons/pizzahut.png</file>
+        <file>icons/sonic.png</file>
+        <file>icons/sports-papa-johns-menu-png-logo-4.png</file>
+        <file>icons/wendys-logo-png--2268.png</file>
+    </qresource>
+</RCC>

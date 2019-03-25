@@ -85,13 +85,15 @@ public:
 
     //must be public at this moment
     QVector<item> menu; //menu vector (vector of items)
+    QVector<float> distance; //Index 0 in this array is always going to be distance from saddleback.
 
 private:
     int id;          //Unique ID of restaurant
     QString name;     //name of restaurant
+    //QIcon icon;
 
     //THIS IS WHERE THE ERROR WAS (distance was declared to be size 10)
-    QVector<float> distance; //Index 0 in this array is always going to be distance from saddleback.
+
 };
 
 #endif // RESTAURANT_H

@@ -1,9 +1,9 @@
 0
-11
+13
 Saddleback College
 0
-0
-8
+0.0
+8.0
 4.29
 12.41
 7.56
@@ -13,12 +13,14 @@ Saddleback College
 12.75
 9.19
 14.54
+10.1
+6.6
 0
 
 McDonald's
 1
 8
-0
+0.0 
 13.2
 15.4
 11.5
@@ -28,6 +30,8 @@ McDonald's
 6.9
 8.56
 3.5
+11.5
+13.8
 8
 Big Mac
 3.99
@@ -50,7 +54,7 @@ Chipotle
 2
 4.29
 13.2
-0
+0.0
 15.1
 14.8
 0.1
@@ -58,7 +62,9 @@ Chipotle
 10.3
 9.3
 5.2
-11
+11.0
+14.2
+4.4
 6
 Veggie taco
 5.99
@@ -78,7 +84,7 @@ Domino's Pizza
 12.41
 15.4
 15.1
-0
+0.0
 4.3
 16.1
 14.3
@@ -86,6 +92,8 @@ Domino's Pizza
 18.3
 17.2
 17.2
+13.4
+18.1
 5
 Veggie pizza
 9.99
@@ -104,13 +112,15 @@ KFC
 11.5
 14.8
 4.3
-0
+0.0
 8.1
 9.4
 14.4
 14.3
 13.2
 13.2
+16.5
+18.8
 4
 Three piece original fried chicken  
 6.99
@@ -128,12 +138,14 @@ Subway
 0.1
 16.1
 8.1
-0
+0.0
 4.5
 8.5
 8.4
 5.2
 12.1
+3.3
+0.8
 4
 Veggie sandwich
 4.99
@@ -152,11 +164,13 @@ In-N-Out Burger
 14.3
 9.4
 4.5
-0
+0.0
 8.56
 11.1
 5.1
 14.2
+12.2
+8.2
 5
 Hamburger
 2.99
@@ -178,10 +192,12 @@ Wendy's
 14.4
 8.5
 8.56
-0
+0.0
 0.7
 5.8
-4
+4.0
+7.8
+10.8
 5
 Hamburger
 3.99
@@ -204,9 +220,11 @@ Jack in the Box
 8.4
 11.1
 0.7
-0
+0.0
 5.7
 4.7
+6.9
+9.4
 4
 Chicken club salad  
 6.99
@@ -228,8 +246,10 @@ El Pollo Loco
 5.1
 5.8
 5.7
-0
+0.0
 9.5
+8.2
+5.5
 3
 Monterrey pollo salad
 6.99
@@ -242,15 +262,17 @@ Papa John's Pizza
 10
 14.54
 3.5
-11
+11.0
 17.2
 13.2
 12.1
 14.2
-4
+4.0
 4.7
 9.5
-0
+0.0
+6.11
+11.8
 5
 Veggie pizza
 4.09
@@ -262,4 +284,60 @@ Cheese pizza
 5.99
 Mushroom and pepperoni pizza 
 6.99
+
+Pizza Hut
+11
+10.1
+11.5 
+14.2
+13.4
+16.5
+3.3
+12.2
+7.8
+6.9
+8.2
+6.11
+0.0
+5.8
+6
+Veggie pizza
+4.99
+Pepperoni pizza 
+8.99
+All meat pizza
+12.99
+Cheese pizza
+5.99
+Mushroom and pepperoni pizza 
+6.99
+Mushroom and green pepper pizza 
+7.29
+
+Sonic
+12
+6.6
+13.8
+4.4
+18.1
+18.8
+0.8
+8.2
+10.8
+9.4
+5.5
+11.8
+5.8
+0.0
+5
+Sonic hamburger
+4.99
+Sonic cheeseburger
+4.29
+New York dog
+2.89
+French fries
+1.79
+Medium Pepsi
+2.55
 
