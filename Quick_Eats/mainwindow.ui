@@ -290,7 +290,7 @@
      </size>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="welcomePage">
      <widget class="QLabel" name="ProgramNameLabel">
@@ -434,9 +434,6 @@
       <property name="pixmap">
        <pixmap resource="resources.qrc">:/icons/logo/QElogosmall.png</pixmap>
       </property>
-      <property name="pixmap">
-       <pixmap resource="resources.qrc">:/icons/logo/QElogosmall.png</pixmap>
-      </property>
      </widget>
      <widget class="QStackedWidget" name="invalidEntryStackedWidget">
       <property name="geometry">
@@ -490,6 +487,7 @@
        </widget>
       </widget>
      </widget>
+     <zorder>invalidEntryStackedWidget</zorder>
      <zorder>label_9</zorder>
      <zorder>ProgramNameLabel</zorder>
      <zorder>descriptionLabel</zorder>
@@ -833,7 +831,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="MWWelcomePage">
        <widget class="QPushButton" name="MWTakeTripButton">
@@ -945,7 +943,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="customPathPage">
          <widget class="QLabel" name="label_3">
@@ -1256,7 +1254,7 @@
            <string>miles</string>
           </property>
          </widget>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>70</x>
@@ -1690,7 +1688,7 @@
          </rect>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="hiddenMenuPage">
          <widget class="QWidget" name="layoutWidget">
@@ -1839,7 +1837,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLogout">

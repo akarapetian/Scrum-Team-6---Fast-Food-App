@@ -32,11 +32,8 @@ HEADERS += \
         mainwindow.h \
     restaurant.h \
     trip.h \
-
     doublehash.h \
     reciept.h
-
-
 
 
 FORMS += \
