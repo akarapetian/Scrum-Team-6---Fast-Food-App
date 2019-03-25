@@ -15,6 +15,7 @@
         <file>icons/wendys-logo-png--2268.png</file>
         <file>logo/QElogo.png</file>
         <file>logo/QElogosmall.png</file>
+        <file>logo/1200px-Saddleback_College_seal.svg.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

@@ -21,8 +21,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->MWStackedWidget->setCurrentIndex(0);
     ui->FStackedWidget->setCurrentIndex(0);
     ui->addMenuItemStackedWidget->setCurrentIndex(0);
-
     ui->TakeTripStackedWidget->setCurrentIndex(0);
+
+    //Setting size constraints on text entries
+    ui->usernameLineEdit->setMaxLength(16);
+    ui->passwordLineEdit->setMaxLength(16);
+    ui->newMenuItemName->setMaxLength(40);
+    ui->newMenuItemPrice->setMaxLength(10);
 
     //allows users to move items around in the custom trip list
     ui->customEditRestaurantListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -45,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     icons[10] = QPixmap (":/icons/icons/sports-papa-johns-menu-png-logo-4.png");
     icons[11] = QPixmap (":/icons/icons/pizzahut.png");
     icons[12] = QPixmap (":/icons/icons/sonic.png");
+
 
     int j = 0;
     for(int i = 0; i < restaurantsVector.size(); i++)
@@ -186,16 +192,19 @@ void MainWindow::on_mainLoginButton_clicked()
 
 void MainWindow::on_loginButton_clicked()
 {
-    //user authentication check //username and pass for foodie is "foodie", mainteneance worker is "MW"
-    if(ui->usernameLineEdit->text() == "foodie" && ui->passwordLineEdit->text() == "foodie")
-    {
-        ui->primaryPageStackedWidget->setCurrentIndex(1);
-    }
-    else if(ui->usernameLineEdit->text() == "MW" && ui->passwordLineEdit->text() == "MW")
-    {
-        ui->primaryPageStackedWidget->setCurrentIndex(2);
-    }
+    DoubleHash dh;
 
+    //user authentication check //username and pass for foodie is "foodie", mainteneance worker is "MW"
+    switch(dh.validEntry(ui->usernameLineEdit->text(),ui->passwordLineEdit->text())){
+    case 0:ui->invalidEntryStackedWidget->setCurrentIndex(1);
+        break;
+    case 1:ui->primaryPageStackedWidget->setCurrentIndex(1);
+           currentMode = 1;
+        break;
+    case 2:ui->primaryPageStackedWidget->setCurrentIndex(2);
+           currentMode = 2;
+        break;
+    }
     //clear entered username and password from line edit
     ui->usernameLineEdit->clear();
     ui->passwordLineEdit->clear();
@@ -208,6 +217,23 @@ void MainWindow::on_actionLogout_triggered()
     ui->loginStackedWidget->setCurrentIndex(0);
     ui->MWStackedWidget->setCurrentIndex(0);
     ui->FStackedWidget->setCurrentIndex(0);
+
+    ui->foodieMenuPriceListWidget->clear();
+    ui->foodieMenuListWidget->clear();
+    ui->foodieRestaurantListWidget->clear();
+    ui->manageMenuListWidget->clear();
+    ui->manageMenuPriceListWidget->clear();
+    ui->manageRestaurantListWidget->clear();
+    ui->manageRestaurantDistanceListWidget->clear();
+    ui->currentLocationMenuItemListWidget->clear();
+    ui->currentLocationMenuPriceListWidget->clear();
+    ui->customEditRestaurantListWidget->clear();
+    ui->customSelectRestaurantListWidget->clear();
+    ui->currentLocationMenuItemListWidget->clear();
+    ui->currentLocationMenuPriceListWidget->clear();
+    ui->recieptListWidget->clear();
+    ui->recieptPricelistWidget->clear();
+    ui->recieptQuantityListWidget->clear();
 }
 
 //************************************************************************
@@ -303,8 +329,6 @@ void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetIte
         restaurantsVector[previous->listWidget()->row(previous)].changeName(previous->text());
     }
 
-
-
     //update the menu list when a new restaurant is selected
 
     ui->manageMenuListWidget->blockSignals(true);
@@ -336,7 +360,7 @@ void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetIte
         ui->manageMenuListWidget->addItem(restaurantsVector[k].menu[i].itemName);
         ui->manageMenuListWidget->item(i)->setSizeHint(QSize(-1, 26));
 
-        ui->manageMenuPriceListWidget->addItem(QString::number(restaurantsVector[k].menu[i].itemPrice));
+        ui->manageMenuPriceListWidget->addItem("$ " + QString::number(restaurantsVector[k].menu[i].itemPrice));
         ui->manageMenuPriceListWidget->item(i)->setSizeHint(QSize(-1, 26));
     }
 }
@@ -349,7 +373,7 @@ void MainWindow::on_manageRestaurantDistanceListWidget_currentItemChanged(QListW
 void MainWindow::on_deleteRestaurantButton_clicked()
 {
     //program currently crashing if all items are removed from list
-    if(ui->manageRestaurantListWidget->currentItem() != nullptr)
+    if(ui->manageRestaurantListWidget->currentItem() != nullptr && ui->manageRestaurantListWidget->currentItem()->text() != "Saddleback College")
     {
         //perform search for the item to be removed
         int i = 0;
@@ -390,7 +414,6 @@ bool MainWindow::validDeletedIndex(int i)
            }
        }
     }
-
     return valid;
 }
 
@@ -401,14 +424,27 @@ void MainWindow::on_addRestaurantButton_clicked()
         //parse second data.txt file and add new restaurants to vector
         readRestaurantFile("/home/anthony/Scrum-Team-6---Fast-Food-App-master/Quick_Eats/data2.txt");
         //update the list view in the manage restaurants page
+
+        ui->manageRestaurantListWidget->blockSignals(true);
+        ui->manageRestaurantDistanceListWidget->blockSignals(true);
+        ui->manageMenuListWidget->blockSignals(true);
+        ui->manageMenuPriceListWidget->blockSignals(true);
+
         ui->manageRestaurantListWidget->clear();
         ui->manageRestaurantDistanceListWidget->clear();
         ui->manageMenuListWidget->clear();
         ui->manageMenuPriceListWidget->clear();
 
+        ui->manageRestaurantListWidget->blockSignals(false);
+        ui->manageRestaurantDistanceListWidget->blockSignals(false);
+        ui->manageMenuListWidget->blockSignals(false);
+        ui->manageMenuPriceListWidget->blockSignals(false);
+
+
         int j = 0;
-        for(int i = 0; i    < restaurantsVector.size(); i++)
+        for(int i = 0; i < restaurantsVector.size(); i++)
         {
+
             if(validDeletedIndex(i))
             {
                 ui->manageRestaurantListWidget->addItem(new QListWidgetItem(QIcon(icons[i]), restaurantsVector[i].getName()));   //icons[i]), restaurantsVector[i].getName()));
@@ -558,7 +594,7 @@ void MainWindow::on_addMenuItemButton_clicked()
             restaurantsVector[k].addMenuItem(ui->newMenuItemName->text(), ui->newMenuItemPrice->text().toFloat(),
                                                                                   restaurantsVector[k].menu.size(), 0);
             ui->manageMenuListWidget->addItem(ui->newMenuItemName->text());
-            ui->manageMenuPriceListWidget->addItem(QString::number(ui->newMenuItemPrice->text().toFloat()));
+            ui->manageMenuPriceListWidget->addItem("$ " + QString::number(ui->newMenuItemPrice->text().toFloat()));
         }
         else
         {
@@ -578,7 +614,7 @@ void MainWindow::on_addMenuItemButton_clicked()
 void MainWindow::on_deleteItemButton_clicked()
 {
     //deletes the item selected on the manageMenuListWidget (not the price widget)
-    if(ui->manageMenuListWidget->currentItem() != nullptr)
+    if(ui->manageMenuListWidget->currentItem() != nullptr && ui->manageMenuListWidget->count() > 1)
     {
         //perform search for the item to be removed
         int k = 0;
@@ -635,7 +671,7 @@ void MainWindow::on_MWTakeTripButton_clicked()
 void MainWindow::on_pathPageBackButton_clicked()
 {
     //IF FOODIE
-   //if()
+   if(currentMode == 1)
    {
        ui->primaryPageStackedWidget->setCurrentIndex(1);
    }
@@ -863,7 +899,6 @@ void MainWindow::on_customTakeTripButton_clicked()
 //need to track distances in here
 void MainWindow::nextRestaurant()
 {
-
     ui->totalLabel->setText(QString::number(currentTrip.getTotalCost()));
     ui->totalDistanceLabel->setText(QString::number(currentTrip.getTotalDistanceTraveled()));
 
@@ -879,7 +914,7 @@ void MainWindow::nextRestaurant()
     for(int i = 0; i < currentTrip.getCurrentLocation().getMenuSize(); i++)
     {
         ui->currentLocationMenuItemListWidget->addItem(currentTrip.getCurrentLocation().menu[i].itemName);
-        ui->currentLocationMenuPriceListWidget->addItem(QString::number(currentTrip.getCurrentLocation().menu[i].itemPrice));
+        ui->currentLocationMenuPriceListWidget->addItem("$ " + QString::number(currentTrip.getCurrentLocation().menu[i].itemPrice));
         ui->currentLocationMenuItemListWidget->item(i)->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         ui->currentLocationMenuItemListWidget->item(i)->setCheckState(Qt::Unchecked);
     }
@@ -894,6 +929,7 @@ void MainWindow::on_continueButton_clicked()
     nextRestaurant();
     ui->TakeTripStackedWidget->setCurrentIndex(1);
 }
+
 
 
 float MainWindow::getSubTotal()
@@ -912,7 +948,10 @@ float MainWindow::getSubTotal()
             {
                 //item is found
                 found = true;
-                sum += ui->myOrderQuantityListWidget->item(i)->text().toInt() * ui->currentLocationMenuPriceListWidget->item(j)->text().toFloat();
+                QTextStream(stdout) << ui->myOrderQuantityListWidget->item(i)->text().toInt() << endl;
+                QTextStream(stdout) << ui->currentLocationMenuPriceListWidget->item(j)->text().toFloat() << endl;
+                QString price = ui->currentLocationMenuPriceListWidget->item(j)->text().remove('$');
+                sum += ui->myOrderQuantityListWidget->item(i)->text().toInt() * price.toFloat();
             }
             else
             {
@@ -1066,11 +1105,8 @@ void MainWindow::on_checkOutButton_clicked()
 
     if(currentTrip.getTripSize() > 1)
     {
-
         //get the distance between current and next restaurant
         int previousRestaurantIndex = currentTrip.getCurrentLocation().getId();
-
-
 
         currentTrip.removeLocation();
 
@@ -1107,7 +1143,7 @@ void MainWindow::on_endTripButton_clicked()
     //check the type of user and
 
     //if foodie
-    //if()
+    if(currentMode == 1)
     {
         ui->primaryPageStackedWidget->setCurrentIndex(1);
     }
@@ -1147,6 +1183,7 @@ void MainWindow::on_endTripButton_clicked()
 //*************************************************
 // FOODIE METHODS
 //*************************************************
+
 
 void MainWindow::on_FTakeTripButton_clicked()
 {
@@ -1193,9 +1230,7 @@ void MainWindow::on_foodieRestaurantListWidget_currentRowChanged(int currentRow)
 {
     ui->foodieRestaurantDistanceListWidget->setCurrentRow(currentRow);
 
-
     //update the menu list when a new restaurant is selected
-
     ui->foodieMenuListWidget->blockSignals(true);
     ui->foodieMenuPriceListWidget->blockSignals(true);
     ui->foodieMenuListWidget->clear();
@@ -1223,7 +1258,7 @@ void MainWindow::on_foodieRestaurantListWidget_currentRowChanged(int currentRow)
         ui->foodieMenuListWidget->addItem(restaurantsVector[k].menu[i].itemName);
         ui->foodieMenuListWidget->item(i)->setSizeHint(QSize(-1, 26));
 
-        ui->foodieMenuPriceListWidget->addItem(QString::number(restaurantsVector[k].menu[i].itemPrice));
+        ui->foodieMenuPriceListWidget->addItem("$ " + QString::number(restaurantsVector[k].menu[i].itemPrice));
         ui->foodieMenuPriceListWidget->item(i)->setSizeHint(QSize(-1, 26));
     }
 

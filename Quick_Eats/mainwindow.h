@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include "restaurant.h"
 #include "trip.h"
+#include "doublehash.h"
 
 namespace Ui {
 class MainWindow;
@@ -98,6 +99,7 @@ private:
     QVector<restaurant> restaurantsVector;
 
     QPixmap icons[13]; //stores restaurant icons
+    QPixmap bigIcons[13]; //stores big icons
 
     bool restaurantsAdded; //returns true if additional restaurants have been read in
 
@@ -118,6 +120,10 @@ private:
 
     //indexes of deleted restaurants
     QVector<int> deletedIndexes;
+
+    //0 mean not logged in, 1 is foodie, 2 is Maintenance Worker
+    int currentMode;
+
 };
 
 #endif // MAINWINDOW_H
