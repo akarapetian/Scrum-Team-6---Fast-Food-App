@@ -308,7 +308,8 @@ void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetIte
     if(ui->manageMenuListWidget->isPersistentEditorOpen(ui->manageMenuListWidget->currentItem()))
     {
         ui->manageMenuListWidget->closePersistentEditor(ui->manageMenuListWidget->currentItem());
-        restaurantsVector[previous->listWidget()->row(previous)].menu[ui->manageMenuListWidget->currentRow()].itemName = ui->manageMenuListWidget->currentItem()->text();
+        restaurantsVector[previous->listWidget()->row(previous)].menu[ui->manageMenuListWidget->currentRow()].itemName
+                = ui->manageMenuListWidget->currentItem()->text();
     }
 
 
@@ -318,7 +319,10 @@ void MainWindow::on_manageRestaurantListWidget_currentItemChanged(QListWidgetIte
     if(ui->manageMenuPriceListWidget->isPersistentEditorOpen(ui->manageMenuPriceListWidget->currentItem()))
     {
         ui->manageMenuPriceListWidget->closePersistentEditor(ui->manageMenuPriceListWidget->currentItem());
-        restaurantsVector[previous->listWidget()->row(previous)].menu[ui->manageMenuPriceListWidget->currentRow()].itemPrice = ui->manageMenuPriceListWidget->currentItem()->text().toFloat();
+        restaurantsVector[previous->listWidget()->row(previous)].menu[ui->manageMenuPriceListWidget->currentRow()].itemPrice
+                = ui->manageMenuPriceListWidget->currentItem()->text().toFloat();
+
+        //ui->manageMenuPriceListWidget->item(previous->listWidget()->row(previous))->setText("$ " + ui->manageMenuPriceListWidget->item(previous->listWidget()->row(previous))->text());
     }
 
 
@@ -523,14 +527,16 @@ void MainWindow::on_manageMenuPriceListWidget_currentItemChanged(QListWidgetItem
         //perform search for the item
         if(isFloatNumber(previous->text()))
         {
+
             restaurantsVector[k].menu[previous->listWidget()->row(previous)].itemPrice = previous->text().toFloat();
+            previous->setText("$ " + previous->text());
         }
         else
         {
             //input is not a float
             QMessageBox::warning(nullptr, "Error", "Invalid Price Input! Please Enter a Float");
 
-            previous->setText(QString::number(restaurantsVector[k].menu[previous->listWidget()->row(previous)].itemPrice));
+            previous->setText("$ " + QString::number(restaurantsVector[k].menu[previous->listWidget()->row(previous)].itemPrice));
 
         }
         ui->manageMenuPriceListWidget->closePersistentEditor(previous);
