@@ -25,7 +25,7 @@ This repository has 5 primary branches. One for each team member and a master br
 - ~~separate first ten restaurants from last two~~
 
 - plan a trip starting at saddleback, and then visit the closest fast food restaurant
-- present a grand reciept at the end of each trip
+- ~~present a grand reciept at the end of each trip~~
 - encrypt mw password
 - ~~address invalid inputs~~
 ------------------------------------
@@ -49,5 +49,5 @@ This repository has 5 primary branches. One for each team member and a master br
   - big o analysis
 
 # Bugs
-- Need to add error checking to persistent editing features
+- ~~Need to add error checking to persistent editing features~~
 - Editing menu prices is quite buggy, not updating the restaurant selection on the pathing page properly
