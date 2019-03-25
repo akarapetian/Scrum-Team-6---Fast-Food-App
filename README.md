@@ -18,7 +18,7 @@ This repository has 5 primary branches. One for each team member and a master br
 - Utkarsh Karki
 
 # To Do
-- Link foodie to MW methods
+- ~~Link foodie to MW methods~~
 - ~~add logos to application and to each restaurant~~
 - ~~display distances from saddleback~~
 - ~~display all restaurants and menu items (for foodie)~~
@@ -26,7 +26,7 @@ This repository has 5 primary branches. One for each team member and a master br
 
 - ~~plan a trip starting at saddleback, and then visit the closest fast food restaurant~~
 - ~~present a grand reciept at the end of each trip~~
-- encrypt mw password
+- ~~encrypt mw password~~
 - ~~address invalid inputs~~
 ------------------------------------
 - submit agile stories
