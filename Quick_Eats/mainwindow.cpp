@@ -904,6 +904,7 @@ void MainWindow::on_continueButton_clicked()
 }
 
 
+
 float MainWindow::getSubTotal()
 {
     float sum = 0;
@@ -1074,11 +1075,8 @@ void MainWindow::on_checkOutButton_clicked()
 
     if(currentTrip.getTripSize() > 1)
     {
-
         //get the distance between current and next restaurant
         int previousRestaurantIndex = currentTrip.getCurrentLocation().getId();
-
-
 
         currentTrip.removeLocation();
 
@@ -1155,6 +1153,7 @@ void MainWindow::on_endTripButton_clicked()
 //*************************************************
 // FOODIE METHODS
 //*************************************************
+
 
 void MainWindow::on_FTakeTripButton_clicked()
 {

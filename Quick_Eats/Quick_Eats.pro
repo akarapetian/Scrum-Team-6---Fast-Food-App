@@ -32,8 +32,10 @@ HEADERS += \
         mainwindow.h \
     restaurant.h \
     trip.h \
+
     reciept.h \
     doublehash.h
+
 
 FORMS += \
         mainwindow.ui

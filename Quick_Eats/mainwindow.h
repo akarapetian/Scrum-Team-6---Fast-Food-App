@@ -122,6 +122,7 @@ private:
 
     //0 mean not logged in, 1 is foodie, 2 is Maintenance Worker
     int currentMode;
+
 };
 
 #endif // MAINWINDOW_H
