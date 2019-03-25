@@ -32,27 +32,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->customEditRestaurantListWidget->setDropIndicatorShown(true);
 
 
-
-//    myTrips.push_back(trip("Mac Man"));
-//    myTrips[0].addLocation(restaurantsVector[0]);
-//    myTrips[0].addLocation(restaurantsVector[1]);
-//    myTrips[0].addLocation(restaurantsVector[2]);
-
-//    myTrips.push_back(trip("Wendy Woman"));
-//    myTrips[1].addLocation(restaurantsVector[1]);
-//    myTrips[1].addLocation(restaurantsVector[0]);
-//    myTrips[1].addLocation(restaurantsVector[2]);
-
-//    myTrips.push_back(trip("Dog Dude"));
-//    myTrips[2].addLocation(restaurantsVector[2]);
-//    myTrips[2].addLocation(restaurantsVector[1]);
-//    myTrips[2].addLocation(restaurantsVector[0]);
-
-//    for(int i  = 0; i < myTrips.size();i++)
-//        ui->myTripsListWidget->addItem(myTrips[i].getName());
-
-
-
     icons[0]  = QPixmap(":/icons/icons/721px-Saddleback_College_logo.png");
     icons[1]  = QPixmap (":/icons/icons/Logo-Mcdonalds-2016.png");
     icons[2]  = QPixmap (":/icons/icons/chipotle-mexican-grill-logo-png-transparent.png");
@@ -234,6 +213,7 @@ void MainWindow::on_actionLogout_triggered()
 //************************************************************************
 // MY TRIPS AND MENU FUNCTIONS
 //************************************************************************
+/*
 void MainWindow::on_MWMyTripsButton_clicked()
 {
     //go to manage restaurants page
@@ -246,6 +226,7 @@ void MainWindow::on_MWMyTripsBackButton_clicked()
     ui->primaryPageStackedWidget->setCurrentIndex(2);
     ui->MWStackedWidget->setCurrentIndex(0);
 }
+
 
 void MainWindow::on_myTripsListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
@@ -268,16 +249,15 @@ void MainWindow::on_myTripsListWidget_itemDoubleClicked(QListWidgetItem *item)
     //if a trip name is double clicked, it allows user to edit the name directly
     ui->myTripsListWidget->openPersistentEditor(item);
 }
-
+*/
 //************************************************************************
 // MANAGE RESTAURANTS AND MENUS FUNCTIONS
 //************************************************************************
 void MainWindow::on_MWManageRestaurantsButton_clicked()
 {
     //go to manage restaurants page
-    ui->MWStackedWidget->setCurrentIndex(3);
+    ui->MWStackedWidget->setCurrentIndex(2);
 }
-
 
 void MainWindow::on_MWManageBackButton_clicked()
 {
@@ -654,6 +634,11 @@ void MainWindow::on_MWTakeTripButton_clicked()
 
 void MainWindow::on_pathPageBackButton_clicked()
 {
+    //IF FOODIE
+   //if()
+   {
+       ui->primaryPageStackedWidget->setCurrentIndex(1);
+   }
 
     ui->MWStackedWidget->setCurrentIndex(0);
     ui->customSelectRestaurantListWidget->clear();
@@ -1023,7 +1008,7 @@ void MainWindow::on_checkOutButton_clicked()
 {
     //incremrent trip total
         //GENERATE RECIEPT ***
-        if(currentTrip.getCurrentLocation().getName() != "Saddleback")
+        if(currentTrip.getCurrentLocation().getName() != "Saddleback College")
         {
             ui->recieptListWidget->addItem(currentTrip.getCurrentLocation().getName());
             ui->recieptPricelistWidget->addItem(" ");
@@ -1115,13 +1100,18 @@ void MainWindow::on_checkOutButton_clicked()
     }
 }
 
-
-
-
-
 void MainWindow::on_endTripButton_clicked()
 {
     //clear all data
+
+    //check the type of user and
+
+    //if foodie
+    //if()
+    {
+        ui->primaryPageStackedWidget->setCurrentIndex(1);
+    }
+
     ui->MWStackedWidget->setCurrentIndex(0);
 
     ui->TakeTripStackedWidget->setCurrentIndex(0);
@@ -1152,4 +1142,104 @@ void MainWindow::on_endTripButton_clicked()
     currentTrip.setTotalCost(0);
     currentTrip.setTotalDistance(0);
 
+}
+
+//*************************************************
+// FOODIE METHODS
+//*************************************************
+
+void MainWindow::on_FTakeTripButton_clicked()
+{
+    //link foodie to mw take trip function to avoid copy/pasting code
+    ui->primaryPageStackedWidget->setCurrentIndex(2);
+    on_MWTakeTripButton_clicked();
+}
+
+void MainWindow::on_FViewRestaurantsButton_clicked()
+{
+    int j = 0;
+    for(int i = 0; i < restaurantsVector.size(); i++)
+    {
+        if(validDeletedIndex(i))
+        {
+            ui->foodieRestaurantListWidget->addItem(new QListWidgetItem(QIcon(icons[i]), restaurantsVector[i].getName()));   //icons[i]), restaurantsVector[i].getName()));
+            ui->foodieRestaurantListWidget->item(j)->setSizeHint(QSize(-1, 26));
+
+            ui->foodieRestaurantDistanceListWidget->addItem(QString::number(restaurantsVector[0].getDistance(i)));
+            ui->foodieRestaurantDistanceListWidget->item(j)->setSizeHint(QSize(-1, 26));
+            ++j;
+        }
+    }
+
+    ui->FStackedWidget->setCurrentIndex(1);
+}
+
+
+void MainWindow::on_FviewRestaurantsBackButton_clicked()
+{
+
+    ui->FStackedWidget->setCurrentIndex(0);
+
+    ui->foodieRestaurantListWidget->blockSignals(true);
+    ui->foodieRestaurantDistanceListWidget->blockSignals(true);
+    ui->foodieRestaurantListWidget->clear();
+    ui->foodieRestaurantDistanceListWidget->clear();
+    ui->foodieRestaurantListWidget->blockSignals(false);
+    ui->foodieRestaurantDistanceListWidget->blockSignals(false);
+
+}
+
+void MainWindow::on_foodieRestaurantListWidget_currentRowChanged(int currentRow)
+{
+    ui->foodieRestaurantDistanceListWidget->setCurrentRow(currentRow);
+
+
+    //update the menu list when a new restaurant is selected
+
+    ui->foodieMenuListWidget->blockSignals(true);
+    ui->foodieMenuPriceListWidget->blockSignals(true);
+    ui->foodieMenuListWidget->clear();
+    ui->foodieMenuPriceListWidget->clear();
+    ui->foodieMenuListWidget->blockSignals(false);
+    ui->foodieMenuPriceListWidget->blockSignals(false);
+
+    //perform search for the item
+    int k = 0;
+    bool found = false;
+
+    while(!found && k < restaurantsVector.size())
+    {
+        if(ui->foodieRestaurantListWidget->currentItem()->text() == restaurantsVector[k].getName())
+        {
+            found = true;
+        }
+        else
+        {
+            ++k;
+        }
+    }
+
+    for(int i = 0; i < restaurantsVector[k].getMenuSize(); i++){
+        ui->foodieMenuListWidget->addItem(restaurantsVector[k].menu[i].itemName);
+        ui->foodieMenuListWidget->item(i)->setSizeHint(QSize(-1, 26));
+
+        ui->foodieMenuPriceListWidget->addItem(QString::number(restaurantsVector[k].menu[i].itemPrice));
+        ui->foodieMenuPriceListWidget->item(i)->setSizeHint(QSize(-1, 26));
+    }
+
+}
+
+void MainWindow::on_foodieRestaurantDistanceListWidget_currentRowChanged(int currentRow)
+{
+    ui->foodieRestaurantListWidget->setCurrentRow(currentRow);
+}
+
+void MainWindow::on_foodieMenuListWidget_currentRowChanged(int currentRow)
+{
+    ui->foodieMenuPriceListWidget->setCurrentRow(currentRow);
+}
+
+void MainWindow::on_foodieMenuPriceListWidget_currentRowChanged(int currentRow)
+{
+    ui->foodieMenuListWidget->setCurrentRow(currentRow);
 }
