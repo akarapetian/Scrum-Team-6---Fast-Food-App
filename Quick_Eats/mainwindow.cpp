@@ -21,8 +21,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->MWStackedWidget->setCurrentIndex(0);
     ui->FStackedWidget->setCurrentIndex(0);
     ui->addMenuItemStackedWidget->setCurrentIndex(0);
-
     ui->TakeTripStackedWidget->setCurrentIndex(0);
+
+    //Setting size constraints on text entries
+    ui->usernameLineEdit->setMaxLength(16);
+    ui->passwordLineEdit->setMaxLength(16);
+    ui->newMenuItemName->setMaxLength(40);
+    ui->newMenuItemPrice->setMaxLength(10);
 
     //allows users to move items around in the custom trip list
     ui->customEditRestaurantListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -186,16 +191,19 @@ void MainWindow::on_mainLoginButton_clicked()
 
 void MainWindow::on_loginButton_clicked()
 {
-    //user authentication check //username and pass for foodie is "foodie", mainteneance worker is "MW"
-    if(ui->usernameLineEdit->text() == "foodie" && ui->passwordLineEdit->text() == "foodie")
-    {
-        ui->primaryPageStackedWidget->setCurrentIndex(1);
-    }
-    else if(ui->usernameLineEdit->text() == "MW" && ui->passwordLineEdit->text() == "MW")
-    {
-        ui->primaryPageStackedWidget->setCurrentIndex(2);
-    }
+    DoubleHash dh;
 
+    //user authentication check //username and pass for foodie is "foodie", mainteneance worker is "MW"
+    switch(dh.validEntry(ui->usernameLineEdit->text(),ui->passwordLineEdit->text())){
+    case 0:ui->invalidEntryStackedWidget->setCurrentIndex(1);
+        break;
+    case 1:ui->primaryPageStackedWidget->setCurrentIndex(1);
+           currentMode = 1;
+        break;
+    case 2:ui->primaryPageStackedWidget->setCurrentIndex(2);
+           currentMode = 2;
+        break;
+    }
     //clear entered username and password from line edit
     ui->usernameLineEdit->clear();
     ui->passwordLineEdit->clear();
@@ -896,6 +904,7 @@ void MainWindow::on_continueButton_clicked()
 }
 
 
+
 float MainWindow::getSubTotal()
 {
     float sum = 0;
@@ -1066,11 +1075,8 @@ void MainWindow::on_checkOutButton_clicked()
 
     if(currentTrip.getTripSize() > 1)
     {
-
         //get the distance between current and next restaurant
         int previousRestaurantIndex = currentTrip.getCurrentLocation().getId();
-
-
 
         currentTrip.removeLocation();
 
@@ -1147,6 +1153,7 @@ void MainWindow::on_endTripButton_clicked()
 //*************************************************
 // FOODIE METHODS
 //*************************************************
+
 
 void MainWindow::on_FTakeTripButton_clicked()
 {

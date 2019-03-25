@@ -290,7 +290,7 @@
      </size>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="welcomePage">
      <widget class="QLabel" name="ProgramNameLabel">
@@ -398,7 +398,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="passwordLineEdit"/>
+              <widget class="QLineEdit" name="passwordLineEdit">
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -430,11 +434,41 @@
       <property name="pixmap">
        <pixmap resource="resources.qrc">:/icons/logo/QElogosmall.png</pixmap>
       </property>
+      <property name="pixmap">
+       <pixmap resource="resources.qrc">:/icons/logo/QElogosmall.png</pixmap>
+      </property>
+     </widget>
+     <widget class="QStackedWidget" name="invalidEntryStackedWidget">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>430</y>
+        <width>291</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <widget class="QWidget" name="Hidden"/>
+      <widget class="QWidget" name="Shown">
+       <widget class="QLabel" name="label_28">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>181</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Invalid Username or Password</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
      <zorder>label_9</zorder>
      <zorder>ProgramNameLabel</zorder>
      <zorder>descriptionLabel</zorder>
      <zorder>loginStackedWidget</zorder>
+     <zorder>invalidEntryStackedWidget</zorder>
     </widget>
     <widget class="QWidget" name="foodie">
      <widget class="QStackedWidget" name="FStackedWidget">
@@ -1428,7 +1462,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuContact">
