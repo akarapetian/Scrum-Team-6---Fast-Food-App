@@ -2,7 +2,7 @@
 #define TRIP_H
 
 #include "restaurant.h"
-#include "shoppingcart.h"
+#include "reciept.h"
 #include <QVector>
 #include <QQueue>
 #include <QString>
