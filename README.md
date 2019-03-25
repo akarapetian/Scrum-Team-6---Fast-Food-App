@@ -9,6 +9,7 @@ This repository has 5 primary branches. One for each team member and a master br
 - Product Backlog 2 : https://docs.google.com/spreadsheets/d/17WVRbR7II49GWTDdlyPJG464o1UyOvP8LAJ-w4ey564/edit?usp=sharing
 - WaffleIO        : https://waffle.io/antboyo/Scrum-Team-6---Fast-Food-App
 - Test Plan.       : https://docs.google.com/document/d/1PLT8xxnri0DXOITjTx1WxXz7WyEFjQGeUdCglg3vWVY/edit?usp=sharing
+- Other information: https://docs.google.com/document/d/1bmHKIa6gdKGCe0F3c6YI1nfwN-tKj_zGFeONH-3TKEA/edit?usp=sharing
 
 # Contributors
 - Alek Peratoner     : Product Manager
@@ -17,16 +18,16 @@ This repository has 5 primary branches. One for each team member and a master br
 - Utkarsh Karki
 
 # To Do
-- Link foodie to MW methods
-- add logos to application and to each restaurant
+- ~~Link foodie to MW methods~~
+- ~~add logos to application and to each restaurant~~
 - ~~display distances from saddleback~~
-- display all restaurants and menu items (for foodie)
+- ~~display all restaurants and menu items (for foodie)~~
 - ~~separate first ten restaurants from last two~~
 
-- plan a trip starting at saddleback, and then visit the closest fast food restaurant
-- present a grand reciept at the end of each trip
-- encrypt mw password
-- address invalid inputs
+- ~~plan a trip starting at saddleback, and then visit the closest fast food restaurant~~
+- ~~present a grand reciept at the end of each trip~~
+- ~~encrypt mw password~~
+- ~~address invalid inputs~~
 ------------------------------------
 - submit agile stories
 - submite uml class diagrams, three use cases, and three state diagrams
@@ -48,6 +49,5 @@ This repository has 5 primary branches. One for each team member and a master br
   - big o analysis
 
 # Bugs
-- program is crashing after running shortest path algorithm in debug mode
-- Need to add error checking to persistent editing features
+- ~~Need to add error checking to persistent editing features~~
 - Editing menu prices is quite buggy, not updating the restaurant selection on the pathing page properly
