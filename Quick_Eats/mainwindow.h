@@ -24,7 +24,6 @@ public:
     ~MainWindow();
 
 private slots:
-
     //void readRestaurantFile(QVector<restaurant>&);
     void writeRestaurantFile();
     void readRestaurantFile(QString filePath);
@@ -48,6 +47,7 @@ private slots:
     bool validDeletedIndex(int i); //returns true if the index is NOT deleted
     void on_manageRestaurantListWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_addRestaurantButton_clicked();
+    bool isFloatNumber(const QString& Qstring);
     void on_addItemButton_clicked();
     void on_manageMenuListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
     void on_manageMenuPriceListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
@@ -55,14 +55,13 @@ private slots:
     void on_manageMenuListWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_manageMenuPriceListWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_deleteItemButton_clicked();
-
+    void on_manageRestaurantDistanceListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
     //Creating trip functions
     void on_MWTakeTripButton_clicked();
     void on_customSelectRestaurantListWidget_itemChanged(QListWidgetItem *item);
     void on_customTakeTripButton_clicked();
     void on_shortestPathButton_clicked();
-
 
     //taking trip functions
     void nextRestaurant();
@@ -83,7 +82,9 @@ private slots:
     void on_checkOutButton_clicked();
     void on_pathPageBackButton_clicked();
 
-    void on_manageRestaurantDistanceListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void on_continueButton_clicked();
+
+    void on_endTripButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -98,6 +99,8 @@ private:
 
     //queue that represents the trip the user is currently taking
     trip currentTrip;
+
+    reciept currentReciept;
 
     //this data structure holds all the custom trips that belong to a user
     //it is a vector of pointers, each pointing to a Queue of restaurants (the custom trip).
@@ -120,8 +123,6 @@ private:
     //these elements may have already been visted, or were not added to the list at all
 
     QVector<int> deletedIndexes;
-
-
 };
 
 #endif // MAINWINDOW_H

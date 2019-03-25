@@ -32,7 +32,7 @@ HEADERS += \
         mainwindow.h \
     restaurant.h \
     trip.h \
-    shoppingcart.h
+    reciept.h
 
 FORMS += \
         mainwindow.ui
