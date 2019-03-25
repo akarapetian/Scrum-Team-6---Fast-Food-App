@@ -9,16 +9,18 @@ struct item{
     //constructor for easily initializing new items
     item(){}
 
-    item(QString newItemName, float newItemPrice, int newItemId)
+    item(QString newItemName, float newItemPrice, int newItemId, int newItemQuantity)
     {
         itemName = newItemName;
-        price = newItemPrice;
+        itemPrice = newItemPrice;
         itemId = newItemId;
+        itemQuantity = newItemQuantity;
     }
 
     QString itemName;
-    float price;
+    float itemPrice;
     int itemId;
+    int itemQuantity;
 };
 
 class restaurant{
@@ -47,9 +49,9 @@ public:
         distance.remove(key);
     }
 
-    void addMenuItem(QString iName,float iPrice,int iId){     
+    void addMenuItem(QString iName,float iPrice,int iId, int iQuantity){
         //create new item
-        item newItem(iName, iPrice, iId);
+        item newItem(iName, iPrice, iId, iQuantity);
 
         //push new item onto the menu
         menu.push_back(newItem);
